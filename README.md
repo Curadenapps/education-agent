@@ -19,6 +19,11 @@ Ask it to help with any of the following:
 | Look up an iTOP protocol step | *"What are the iTOP steps for a follow-up session?"* |
 | Generate a patient session template | *"Create an initial session template with BOB score 18%"* |
 | Find a Curaden Academy course | *"What Academy courses cover BOB measurement for beginners?"* |
+| Check if a seminar plan is compliant | *"Can I run an iTOP Introductory with 1 instructor for 15 people?"* |
+| Understand certification pathways | *"How do I become an iTOP Lecturer?"* |
+| Get a before/during/after checklist | *"What do I need to do before my iTOP seminar next month?"* |
+| Check brand or logo rules | *"Can I use the iTOP logo alongside the CURAPROX logo?"* |
+| Understand a technique | *"Walk me through the Bass technique step by step"* |
 
 ---
 
@@ -66,21 +71,15 @@ Technology (apps, screens, digital tools) is noted as a **future enhancement** �
 
 ---
 
-## For the Curaden team: Two files to fill in
+## Reference content
 
-Two reference files are currently placeholders. The assistant works without them but will be much more powerful once they are populated:
+All key iTOP content has been loaded from the iTOP Guidelines 2024 and the Introduction Brochure:
 
-**1. iTOP Protocols** — Add your full iTOP Guidelines 2024 content here:
-```
-skills/itop-sop/references/itop-protocols.md
-```
+- **Protocols** — Bass technique, IDB, Solo, Loop floss, IAP/IAC measurement
+- **Operational rules** — T2T ratios, certification pathways, seminar requirements, brand rules, HQ contacts
+- **Course catalogue** — iTOP Info, Introductory, Advanced, Recall, Educator
 
-**2. Academy Catalogue** — Add your Curaden Academy course listings here:
-```
-skills/itop-sop/references/academy-catalogue.md
-```
-
-Both files already contain instructions on the exact format to use.
+To update any of this content, edit the relevant file in `skills/itop-sop/references/`.
 
 ---
 
@@ -93,7 +92,7 @@ itop-agent/
 └── skills/
     └── itop-sop/
         └── references/
-            ├── itop-protocols.md       ← PLACEHOLDER: add iTOP Guidelines 2024
+            ├── itop-protocols.md       ← Bass, IDB, Solo, Loop floss, IAP/IAC steps
             ├── bob-thresholds.md       ← BOB/PCR/MGI scoring thresholds
             ├── sop-templates.md        ← SOP document structure
             ├── touch-to-teach.md       ← Hands-on teaching framework
@@ -102,7 +101,8 @@ itop-agent/
             ├── feedback-synthesis.md   ← Feedback collection & synthesis
             ├── educational-psychology.md← Learning science principles
             ├── content-guardrails.md   ← Clinical & educational safety rules
-            └── academy-catalogue.md    ← PLACEHOLDER: add course listings
+            ├── itop-operational-knowledge.md ← Ratios, certification, brand, contacts
+            └── academy-catalogue.md    ← iTOP course listings (Intro, Advanced, Recall, Educator)
 ```
 
 ---
