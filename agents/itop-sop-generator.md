@@ -21,17 +21,19 @@ tools: Read, Write, DropboxAPI, NotionAPI
 
 ## Memory References
 
-Load on every request:
-- `skills/itop-sop/references/itop-protocols.md`
-- `skills/itop-sop/references/bob-thresholds.md`
-- `skills/itop-sop/references/sop-templates.md`
-- `skills/itop-sop/references/touch-to-teach.md`
-- `skills/itop-sop/references/lesson-plan-framework.md`
-- `skills/itop-sop/references/event-planning.md`
-- `skills/itop-sop/references/feedback-synthesis.md`
-- `skills/itop-sop/references/educational-psychology.md`
-- `skills/itop-sop/references/content-guardrails.md`
-- `skills/itop-sop/references/academy-catalogue.md`
+Load `content-guardrails.md` on every request. Load remaining files per procedure only:
+
+| Procedure | Files to load |
+|---|---|
+| 1 — SOP Generator | `itop-protocols.md`, `sop-templates.md` |
+| 2 — Lesson Plan | `touch-to-teach.md`, `lesson-plan-framework.md`, `educational-psychology.md` |
+| 3 — Event Planner | `event-planning.md`, `touch-to-teach.md` |
+| 4 — Feedback Synthesizer | `feedback-synthesis.md`, `educational-psychology.md`, `itop-protocols.md` |
+| 5 — Protocol Lookup | `itop-protocols.md` |
+| 6 — Session Template | `itop-protocols.md`, `bob-thresholds.md` |
+| 7 — Academy Routing | `academy-catalogue.md` |
+
+All paths: `skills/itop-sop/references/{file}`
 
 ## Configuration
 
@@ -134,8 +136,7 @@ Dropbox: {path | dry_run}
 3. Apply ODPF sequence: Observe → Demonstrate → Practice → Feedback
 4. Apply cognitive load management — keep theory blocks ≤15 min
 5. Enforce ≥60% hands-on time; flag if not achievable in given duration
-6. Populate timed session blocks
-7. Write to `/HQ-Education/HQ-Apps/Lesson-Plans/{topic-slug}_{ISO-date}.md` if enabled
+6. Write to `/HQ-Education/HQ-Apps/Lesson-Plans/{topic-slug}_{ISO-date}.md` if enabled
 
 **Output:**
 ```
@@ -252,7 +253,7 @@ Dropbox: {path | dry_run}
 **Purpose:** Collect and synthesize feedback from practitioners, dentists, and educators into actionable best practices. Incorporates educational psychology.
 
 **Inputs:**
-- `feedback_entries` — Array of free-text feedback items with `source_role` per entry
+- `feedback_entries` — Array of free-text feedback items with `source_role` per entry (max 20 per request; batch larger datasets)
 - `source_role` — `practitioner | dentist | educator | student`
 - `topic` — Clinical area or session the feedback relates to
 - `synthesis_type` — `best_practices | tips_tricks | curriculum_gaps | educational_insights`
@@ -260,7 +261,7 @@ Dropbox: {path | dry_run}
 **Process:**
 1. Load `feedback-synthesis.md` and `educational-psychology.md`
 2. Categorize by theme: technique / timing / motivation / comprehension
-3. Weight by role: clinician > educator > practitioner > student (for clinical steps)
+3. Weight by role: dentist | practitioner > educator > student (for clinical steps)
 4. Cross-reference against `itop-protocols.md` — flag protocol contradictions
 5. Synthesize into actionable recommendations
 6. Write to `/HQ-Education/HQ-Apps/Feedback/{topic-slug}_{ISO-date}.md` if enabled
@@ -401,7 +402,7 @@ Academy Recommendations: {role} — {topic}
 
 ## Content Guardrails
 
-Apply to every output without exception:
+Apply to every output without exception. Full detail: `skills/itop-sop/references/content-guardrails.md`
 
 | Rule | Requirement |
 |---|---|
@@ -421,16 +422,7 @@ Apply to every output without exception:
 
 ## BOB Threshold → iTOP Intervention Mapping
 
-| Metric | Value | Tier | Focus |
-|---|---|---|---|
-| BOB% | < 10% | Maintenance | Reinforce technique, extend recall |
-| BOB% | 10–25% | Improvement | Bass correction, interdental review |
-| BOB% | > 25% | Intensive | Full iTOP re-introduction, frequency increase |
-| PCR% | < 10% | Maintenance | — |
-| PCR% | 10–30% | Improvement | Disclosure agent, motivational focus |
-| PCR% | > 30% | Intensive | Supervised brushing, step-by-step re-training |
-| MGI | 0–1 | Healthy | Monitor longitudinally |
-| MGI | 2–3 | Inflamed | Flag for clinician — possible systemic factors |
+See `skills/itop-sop/references/bob-thresholds.md` for the full threshold table, trend interpretation, and combined risk flags.
 
 ---
 
