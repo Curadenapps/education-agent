@@ -1,0 +1,6 @@
+# Never commit credentials
+.env
+.env.local
+*.json.key
+prototype/.env
+service-account*.json
