@@ -18,6 +18,10 @@ Ask it to help with any of the following:
 | Summarise feedback into best practices | *"Here is feedback from 3 practitioners — synthesise into tips and tricks"* |
 | Look up an iTOP protocol step | *"What are the iTOP steps for a follow-up session?"* |
 | Generate a patient session template | *"Create an initial session template with BOB score 18%"* |
+| Apply COM-B to a patient case | *"My patient understands the technique but isn't doing it at home — what's blocking them?"* |
+| Write a patient implementation intention | *"Help me close this session with a specific one-thing plan for this patient"* |
+| Structure a follow-up conversation | *"How should I open the follow-up conversation after a first IDB session?"* |
+| Reframe a BOB result for a patient | *"My patient's BOB dropped from 28 to 14 — how do I present this?"* |
 | Find a Curaden Academy course | *"What Academy courses cover BOB measurement for beginners?"* |
 | Check if a seminar plan is compliant | *"Can I run an iTOP Introductory with 1 instructor for 15 people?"* |
 | Understand certification pathways | *"How do I become an iTOP Lecturer?"* |
@@ -92,17 +96,18 @@ itop-agent/
 └── skills/
     └── itop-sop/
         └── references/
-            ├── itop-protocols.md       ← Bass, IDB, Solo, Loop floss, IAP/IAC steps
-            ├── bob-thresholds.md       ← BOB/PCR/MGI scoring thresholds
-            ├── sop-templates.md        ← SOP document structure
-            ├── touch-to-teach.md       ← Hands-on teaching framework
-            ├── lesson-plan-framework.md← Lesson plan structure & objectives
-            ├── event-planning.md       ← Event layout & run sheet templates
-            ├── feedback-synthesis.md   ← Feedback collection & synthesis
-            ├── educational-psychology.md← Learning science principles
-            ├── content-guardrails.md   ← Clinical & educational safety rules
-            ├── itop-operational-knowledge.md ← Ratios, certification, brand, contacts
-            └── academy-catalogue.md    ← iTOP course listings (Intro, Advanced, Recall, Educator)
+            ├── itop-protocols.md               ← Bass, IDB, Solo, Loop floss, IAP/IAC steps
+            ├── bob-thresholds.md               ← BOB/PCR/MGI scoring thresholds
+            ├── sop-templates.md                ← SOP document structure
+            ├── touch-to-teach.md               ← Hands-on teaching framework
+            ├── lesson-plan-framework.md        ← Lesson plan structure & objectives
+            ├── event-planning.md               ← Event layout & run sheet templates
+            ├── feedback-synthesis.md           ← Feedback collection & synthesis
+            ├── educational-psychology.md       ← Learning science: spaced repetition, COM-B, micro goals, follow-up
+            ├── patient-behaviour-change.md     ← COM-B model, patient session arc, implementation intentions, BOB reframing
+            ├── content-guardrails.md           ← Clinical & educational safety rules
+            ├── itop-operational-knowledge.md   ← Ratios, certification, brand, contacts
+            └── academy-catalogue.md            ← iTOP course listings (Intro, Advanced, Recall, Educator)
 ```
 
 ---
