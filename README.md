@@ -1,8 +1,8 @@
 # iTOP SOP Generator
 
-An AI assistant for the Curaden iTOP methodology. It helps you create SOPs, lesson plans, training events, and synthesize feedback — all saved directly to Dropbox.
+An AI assistant for the Curaden iTOP methodology. It helps you create SOPs, lesson plans, training events, and synthesize feedback — all saved directly to Google Drive.
 
-**You do not need to understand GitHub to use this.** This page is just where the assistant lives. Your actual outputs go to Dropbox.
+**You do not need to understand GitHub to use this.** This page is just where the assistant lives. Your actual outputs go to Google Drive.
 
 ---
 
@@ -33,10 +33,10 @@ Ask it to help with any of the following:
 
 ## Where do my outputs go?
 
-Everything the assistant generates is saved to your Dropbox folder:
+Everything the assistant generates is saved to your Google Drive folder:
 
 ```
-Dropbox → HQ-Education → HQ-Apps
+Google Drive → iTOP Agent folder (shared)
     ├── SOPs/
     ├── Lesson-Plans/
     ├── Events/

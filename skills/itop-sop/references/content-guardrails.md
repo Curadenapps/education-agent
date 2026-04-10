@@ -42,13 +42,15 @@ Apply to every agent output without exception. These rules extend the original i
 | Role weighting disclosed | Synthesis reports must state the weighting applied per source role |
 | No anonymous fabrication | Do not generate "representative feedback" — only synthesize provided entries |
 
-## Dropbox Guardrail
+## Google Drive Guardrail
+
+Root folder ID: `1j5VI1J1qVZ2uLcCkvwFXnfQgVh3Cz5Bn`
 
 | Setting | Behaviour |
 |---|---|
-| `dry_run: false` | Write file to Dropbox path and return confirmed path |
-| `dry_run: true` | Log intended Dropbox path in output — do not write |
-| `save_to_dropbox: false` | Skip Dropbox write entirely; return output inline only |
+| `dry_run: false` | Write file to Drive subfolder and return confirmed path |
+| `dry_run: true` | Log intended Drive path in output — do not write |
+| `save_to_drive: false` | Skip Drive write entirely; return output inline only |
 
 ## Guardrail Output Format
 
