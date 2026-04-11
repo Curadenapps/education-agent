@@ -19,7 +19,7 @@
     --grey-text:  #6b7280;
     --text:       #1a1d23;
 
-    /* Brush accent colours (CPS sizes) */
+    /* Brush accent colours */
     --red:    #e63946;
     --pink:   #f4a0ae;
     --yellow: #f9c74f;
@@ -47,7 +47,6 @@
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    padding: 0;
   }
 
   .sidebar-logo {
@@ -58,17 +57,9 @@
     gap: 12px;
   }
 
-  /* SVG brush icon */
-  .brush-icon {
-    width: 28px;
-    height: 44px;
-    flex-shrink: 0;
-  }
+  .brush-icon { width: 28px; height: 44px; flex-shrink: 0; }
 
-  .logo-text {
-    display: flex;
-    flex-direction: column;
-  }
+  .logo-text { display: flex; flex-direction: column; }
 
   .logo-itop {
     font-size: 22px;
@@ -118,21 +109,10 @@
   }
 
   .nav-item:hover { background: rgba(255,255,255,0.1); }
+  .nav-item.active { background: rgba(255,255,255,0.18); color: var(--white); font-weight: 500; }
 
-  .nav-item.active {
-    background: rgba(255,255,255,0.18);
-    color: var(--white);
-    font-weight: 500;
-  }
+  .nav-icon { width: 16px; height: 16px; opacity: 0.85; flex-shrink: 0; }
 
-  .nav-icon {
-    width: 16px;
-    height: 16px;
-    opacity: 0.85;
-    flex-shrink: 0;
-  }
-
-  /* Brush colour dots on nav items */
   .dot {
     width: 8px;
     height: 8px;
@@ -146,11 +126,7 @@
     border-top: 1px solid rgba(255,255,255,0.12);
   }
 
-  .user-pill {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .user-pill { display: flex; align-items: center; gap: 10px; }
 
   .avatar {
     width: 32px;
@@ -167,28 +143,11 @@
   }
 
   .user-info { flex: 1; overflow: hidden; }
-
-  .user-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--white);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .user-role {
-    font-size: 11px;
-    color: rgba(255,255,255,0.55);
-  }
+  .user-name { font-size: 13px; font-weight: 500; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { font-size: 11px; color: rgba(255,255,255,0.55); }
 
   /* ── Main chat area ── */
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
   .topbar {
     background: var(--white);
@@ -201,23 +160,9 @@
     flex-shrink: 0;
   }
 
-  .topbar-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .topbar-sub {
-    font-size: 12px;
-    color: var(--grey-text);
-    margin-top: 1px;
-  }
-
-  .topbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .topbar-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .topbar-sub { font-size: 12px; color: var(--grey-text); margin-top: 1px; }
+  .topbar-actions { display: flex; align-items: center; gap: 8px; }
 
   .badge {
     font-size: 11px;
@@ -228,45 +173,163 @@
     color: var(--blue);
   }
 
+  /* ── Chat area ── */
   .chat-area {
     flex: 1;
     overflow-y: auto;
-    padding: 32px 24px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    gap: 0;
   }
+
+  .chat-area.has-messages { justify-content: flex-start; }
+  .chat-area:not(.has-messages) { align-items: center; justify-content: center; }
 
   /* Empty state */
-  .empty-state {
-    text-align: center;
-    max-width: 420px;
+  .empty-state { text-align: center; max-width: 420px; }
+  .empty-brush { margin: 0 auto 20px; display: block; }
+  .empty-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .empty-sub { font-size: 14px; color: var(--grey-text); line-height: 1.6; }
+
+  /* ── Message bubbles ── */
+  .msg {
+    display: flex;
+    flex-direction: column;
+    max-width: 72%;
+    margin-bottom: 16px;
   }
 
-  .empty-brush {
-    margin: 0 auto 20px;
-    display: block;
-  }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.agent { align-self: flex-start; align-items: flex-start; }
 
-  .empty-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  .empty-sub {
-    font-size: 14px;
+  .msg-meta {
+    font-size: 11px;
     color: var(--grey-text);
-    line-height: 1.6;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
-  /* Input bar placeholder */
+  .msg-meta .agent-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    display: inline-block;
+  }
+
+  .bubble {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .msg.user .bubble {
+    background: var(--blue);
+    color: var(--white);
+    border-bottom-right-radius: 3px;
+  }
+
+  .msg.agent .bubble {
+    background: var(--white);
+    color: var(--text);
+    border-left: 3px solid var(--blue);
+    border-bottom-left-radius: 3px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* File pill */
+  .file-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--blue);
+    color: var(--white);
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    border-bottom-right-radius: 3px;
+  }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: none;
+    align-self: flex-start;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 14px;
+    background: var(--white);
+    border-left: 3px solid var(--blue);
+    border-radius: 12px;
+    border-bottom-left-radius: 3px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    margin-bottom: 16px;
+  }
+
+  .typing-indicator.visible { display: flex; }
+
+  .typing-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0.4;
+    animation: bounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* ── Quick-action chips ── */
+  .chips {
+    padding: 12px 24px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-top: 1px solid var(--grey-line);
+    padding-top: 12px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--grey-line);
+    background: var(--white);
+    font-size: 13px;
+    font-family: var(--font);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+
+  .chip:hover { border-color: var(--blue); background: var(--blue-light); }
+
+  .chip-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── Input bar ── */
   .input-bar {
     background: var(--white);
     border-top: 1px solid var(--grey-line);
-    padding: 14px 24px;
+    padding: 12px 24px 14px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -302,10 +365,16 @@
     cursor: pointer;
     color: var(--grey-text);
     flex-shrink: 0;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
 
   .icon-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .icon-btn.mic-active { border-color: var(--blue); color: var(--white); background: var(--blue); animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(26,94,168,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(26,94,168,0); }
+  }
 
   .send-btn {
     width: 42px;
@@ -323,6 +392,9 @@
 
   .send-btn:hover { background: var(--blue-dark); }
 
+  /* Hidden file input */
+  #file-input { display: none; }
+
   /* ── Document panel ── */
   .doc-panel {
     width: var(--doc-w);
@@ -330,6 +402,12 @@
     border-left: 1px solid var(--grey-line);
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .accent-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--pink) 33%, var(--yellow) 66%, var(--green) 100%);
     flex-shrink: 0;
   }
 
@@ -343,11 +421,7 @@
     flex-shrink: 0;
   }
 
-  .doc-header-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-  }
+  .doc-header-title { font-size: 13px; font-weight: 600; color: var(--text); }
 
   .doc-body {
     flex: 1;
@@ -363,13 +437,6 @@
   }
 
   .doc-body svg { opacity: 0.3; }
-
-  /* Accent bar at top of doc panel */
-  .accent-bar {
-    height: 3px;
-    background: linear-gradient(90deg, var(--red) 0%, var(--pink) 33%, var(--yellow) 66%, var(--green) 100%);
-    flex-shrink: 0;
-  }
 </style>
 </head>
 <body>
@@ -377,11 +444,8 @@
 <!-- ── Sidebar ── -->
 <aside class="sidebar">
   <div class="sidebar-logo">
-    <!-- iTOP brush SVG (coloured segments matching brand) -->
     <svg class="brush-icon" viewBox="0 0 28 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- i dot -->
       <rect x="10" y="0" width="8" height="8" rx="1.5" fill="white"/>
-      <!-- brush handle segments -->
       <rect x="10" y="12" width="8" height="8" rx="1" fill="#e63946"/>
       <rect x="10" y="21" width="8" height="7" rx="1" fill="#f4a0ae"/>
       <rect x="10" y="29" width="8" height="7" rx="1" fill="#f9c74f"/>
@@ -394,27 +458,27 @@
 
   <nav class="sidebar-nav">
     <div class="nav-label">Generate</div>
-    <div class="nav-item active">
+    <div class="nav-item active" onclick="triggerChip('ask')">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v1H2V3zm0 3h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6zm4 2a.5.5 0 000 1h4a.5.5 0 000-1H6z"/></svg>
       Ask the Agent
       <span class="dot" style="background:var(--blue-light);"></span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="triggerChip('sop')">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H4zm1 3h6v1H5V5zm0 2.5h6v1H5v-1zm0 2.5h4v1H5v-1z"/></svg>
       Create SOP
       <span class="dot" style="background:var(--red);"></span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="triggerChip('lesson')">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 5h2v4H7V5zm0 5h2v2H7v-2z"/></svg>
       Lesson Plan
       <span class="dot" style="background:var(--pink);"></span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="triggerChip('event')">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3a1 1 0 011-1h12a1 1 0 011 1v2H1V3zm0 4h14v6a1 1 0 01-1 1H2a1 1 0 01-1-1V7zm3 2v1h4V9H4z"/></svg>
       Event Plan
       <span class="dot" style="background:var(--yellow);"></span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="triggerChip('feedback')">
       <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1C4.13 1 1 4.13 1 8s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V3.5h1.5V5z"/></svg>
       Synthesise Feedback
       <span class="dot" style="background:var(--green);"></span>
@@ -458,10 +522,10 @@
     </div>
   </div>
 
-  <div class="chat-area">
-    <div class="empty-state">
-      <!-- Large brush icon in empty state -->
-      <svg class="empty-brush" width="48" height="72" viewBox="0 0 28 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chat messages -->
+  <div class="chat-area" id="chat-area">
+    <div class="empty-state" id="empty-state">
+      <svg class="empty-brush" width="48" height="72" viewBox="0 0 28 44" fill="none">
         <rect x="10" y="0" width="8" height="8" rx="1.5" fill="#1A5EA8"/>
         <rect x="10" y="12" width="8" height="8" rx="1" fill="#e63946"/>
         <rect x="10" y="21" width="8" height="7" rx="1" fill="#f4a0ae"/>
@@ -471,20 +535,44 @@
       <div class="empty-title">How can I help today?</div>
       <div class="empty-sub">Ask me anything about iTOP — protocols, seminar planning, lesson plans, certifications, or generate a document.</div>
     </div>
+    <!-- Typing indicator lives inside chat-area -->
+    <div class="typing-indicator" id="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
   </div>
 
+  <!-- Quick-action chips -->
+  <div class="chips">
+    <button class="chip" onclick="triggerChip('sop')">
+      <span class="chip-dot" style="background:var(--red);"></span> Create SOP
+    </button>
+    <button class="chip" onclick="triggerChip('lesson')">
+      <span class="chip-dot" style="background:var(--pink);"></span> Lesson Plan
+    </button>
+    <button class="chip" onclick="triggerChip('event')">
+      <span class="chip-dot" style="background:var(--yellow);"></span> Event Plan
+    </button>
+    <button class="chip" onclick="triggerChip('feedback')">
+      <span class="chip-dot" style="background:var(--green);"></span> Synthesise Feedback
+    </button>
+    <button class="chip" onclick="triggerChip('ask')">
+      <span class="chip-dot" style="background:var(--blue);"></span> Ask a Question
+    </button>
+  </div>
+
+  <!-- Input bar -->
   <div class="input-bar">
-    <!-- Mic -->
-    <button class="icon-btn" title="Voice input">
+    <button class="icon-btn" id="mic-btn" title="Voice input" onclick="toggleMic()">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a3 3 0 00-3 3v4a3 3 0 006 0V4a3 3 0 00-3-3zm-4.5 7a4.5 4.5 0 009 0h-1a3.5 3.5 0 01-7 0H3.5zM7.5 13v2h1v-2h-1z"/></svg>
     </button>
-    <!-- Upload -->
-    <button class="icon-btn" title="Upload document">
+    <button class="icon-btn" title="Upload document" onclick="document.getElementById('file-input').click()">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L4 5h3v5h2V5h3L8 1zm-5 9v3h10v-3h-1v2H4v-2H3z"/></svg>
     </button>
-    <input class="input-field" type="text" placeholder="Ask a question or describe what you need…">
-    <!-- Send -->
-    <button class="send-btn" title="Send">
+    <input type="file" id="file-input" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" onchange="handleFileUpload(this)">
+    <input class="input-field" id="input-field" type="text" placeholder="Ask a question or describe what you need…" onkeydown="if(event.key==='Enter') sendMessage()">
+    <button class="send-btn" title="Send" onclick="sendMessage()">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M1.5 1.5l13 6.5-13 6.5V9.5l9-3-9-3V1.5z"/></svg>
     </button>
   </div>
@@ -496,7 +584,7 @@
   <div class="doc-header">
     <span class="doc-header-title">Generated Document</span>
   </div>
-  <div class="doc-body">
+  <div class="doc-body" id="doc-body">
     <svg width="40" height="48" viewBox="0 0 40 48" fill="none">
       <rect x="4" y="4" width="28" height="36" rx="3" stroke="#1A5EA8" stroke-width="2"/>
       <line x1="10" y1="14" x2="26" y2="14" stroke="#1A5EA8" stroke-width="2" stroke-linecap="round"/>
@@ -507,5 +595,192 @@
   </div>
 </aside>
 
+<script>
+// ── Simulated iTOP responses ──
+const RESPONSES = {
+  sop: {
+    text: "I've generated an SOP for the Modified Bass Technique based on iTOP Guidelines 2024, §3. The document covers grip and angulation (45° at the gingival margin), zone-by-zone application across all 6 zones, and the key rule: zero pressure once bristles are placed. It includes deviation logging guidance and is ready for clinician review.",
+    doc: true, docType: 'sop', docTitle: 'SOP — Modified Bass Technique'
+  },
+  lesson: {
+    text: "Here's a 90-minute Touch-to-Teach lesson plan using the ODPF sequence: Observe (10 min), Demonstrate (15 min), Practice (45 min), Feedback (20 min). The plan targets a 1:8 instructor-to-participant ratio for an Introductory cohort, with competency checkpoints at each zone. Hands-on time is 65% — above the 60% minimum.",
+    doc: true, docType: 'lesson', docTitle: 'Lesson Plan — Introductory T2T Session'
+  },
+  event: {
+    text: "I've built a seminar event plan for a 1-day iTOP Introductory seminar (max 16 participants, 2 instructors). It includes pre-event checklist (room layout, CPS brush kit counts, patient confirmation), run-of-day schedule, and post-event tasks (feedback collection, recall booking prompt). All steps reference iTOP Operational Guidelines.",
+    doc: true, docType: 'event', docTitle: 'Event Plan — 1-Day Introductory Seminar'
+  },
+  feedback: {
+    text: "I've synthesised feedback from 3 source roles: Participant, Dentist Sponsor, and Educator. Key themes: strong on practical technique demonstration, gap noted in recall scheduling communication. No protocol deviations detected. Role weightings applied — Educator input weighted highest for curriculum recommendations.",
+    doc: true, docType: 'feedback', docTitle: 'Feedback Synthesis Report'
+  },
+  ask: {
+    text: "I'm your iTOP knowledge assistant. You can ask me about protocols (Modified Bass, IDB, Solo, Loop Floss), BOB/PCR measurement thresholds, seminar planning, certification pathways, Touch-to-Teach ratios, or compliance checks. What would you like to know?",
+    doc: false
+  }
+};
+
+const chipLabels = {
+  sop: 'Create SOP',
+  lesson: 'Lesson Plan',
+  event: 'Event Plan',
+  feedback: 'Synthesise Feedback',
+  ask: 'Ask a Question'
+};
+
+// ── Core chat functions ──
+function addUserMessage(text, isFilePill) {
+  hideEmpty();
+  const chat = document.getElementById('chat-area');
+  const typing = document.getElementById('typing-indicator');
+  const msg = document.createElement('div');
+  msg.className = 'msg user';
+
+  if (isFilePill) {
+    msg.innerHTML = `<div class="file-pill"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 0v3h3M6 9h4M6 11h3"/></svg>${escHtml(text)}</div>`;
+  } else {
+    msg.innerHTML = `<div class="bubble">${escHtml(text)}</div>`;
+  }
+
+  chat.insertBefore(msg, typing);
+  scrollChat();
+}
+
+function addAgentMessage(text) {
+  const chat = document.getElementById('chat-area');
+  const typing = document.getElementById('typing-indicator');
+  const msg = document.createElement('div');
+  msg.className = 'msg agent';
+  msg.innerHTML = `
+    <div class="msg-meta"><span class="agent-dot"></span> iTOP Agent</div>
+    <div class="bubble">${escHtml(text)}</div>`;
+  chat.insertBefore(msg, typing);
+  scrollChat();
+}
+
+function showTyping() {
+  document.getElementById('typing-indicator').classList.add('visible');
+  scrollChat();
+}
+
+function hideTyping() {
+  document.getElementById('typing-indicator').classList.remove('visible');
+}
+
+function hideEmpty() {
+  const e = document.getElementById('empty-state');
+  if (e) { e.remove(); }
+  document.getElementById('chat-area').classList.add('has-messages');
+}
+
+function scrollChat() {
+  const c = document.getElementById('chat-area');
+  c.scrollTop = c.scrollHeight;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Send message ──
+function sendMessage() {
+  const field = document.getElementById('input-field');
+  const text = field.value.trim();
+  if (!text) return;
+  field.value = '';
+  addUserMessage(text, false);
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addAgentMessage("I've noted your question. In the live version, this will query the iTOP knowledge base via Claude Sonnet 4.6 and return a cited response. For now, try one of the quick-action chips to see a sample document output.");
+  }, 1500);
+}
+
+// ── Chip trigger ──
+function triggerChip(type) {
+  const r = RESPONSES[type];
+  const label = chipLabels[type] || type;
+  hideEmpty();
+  addUserMessage(label, false);
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addAgentMessage(r.text);
+    if (r.doc) {
+      showDoc(r.docType, r.docTitle);
+    }
+  }, 1500);
+}
+
+// ── File upload ──
+function handleFileUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  const name = input.files[0].name;
+  input.value = '';
+  addUserMessage('📎 ' + name, true);
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addAgentMessage('Got it — I\'ll use ' + name + ' to inform my response. In the live version this file will be passed to the agent as context. What would you like me to do with it?');
+  }, 1200);
+}
+
+// ── Mic (Web Speech API) ──
+let recognition = null;
+let micActive = false;
+
+function toggleMic() {
+  const btn = document.getElementById('mic-btn');
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input is not supported in this browser. Try Chrome or Edge.');
+    return;
+  }
+  if (micActive) {
+    recognition && recognition.stop();
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    micActive = true;
+    btn.classList.add('mic-active');
+  };
+  recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    document.getElementById('input-field').value = transcript;
+  };
+  recognition.onend = () => {
+    micActive = false;
+    btn.classList.remove('mic-active');
+  };
+  recognition.onerror = () => {
+    micActive = false;
+    btn.classList.remove('mic-active');
+  };
+  recognition.start();
+}
+
+// ── Document panel stub (Phase 3 will populate this) ──
+function showDoc(type, title) {
+  const body = document.getElementById('doc-body');
+  const colours = { sop: '#e63946', lesson: '#f4a0ae', event: '#f9c74f', feedback: '#52b788' };
+  const colour = colours[type] || '#1A5EA8';
+  body.innerHTML = `
+    <div style="text-align:left;width:100%;">
+      <span style="display:inline-block;padding:3px 10px;border-radius:20px;background:${colour};color:${type==='lesson'?'#1a1d23':'#fff'};font-size:11px;font-weight:600;margin-bottom:12px;">${title.split('—')[0].trim()}</span>
+      <div style="font-size:13px;font-weight:600;color:#1a1d23;margin-bottom:8px;">${title}</div>
+      <div style="font-size:12px;color:#6b7280;line-height:1.7;">
+        Document preview will render here in Phase 3 — with full formatted content, section headings, and action buttons (Save to Drive / Download).
+      </div>
+      <div style="margin-top:16px;padding:10px 12px;background:#f5f6f8;border-radius:8px;font-size:11px;color:#6b7280;">
+        ⏳ Phase 3 coming next — formatted output panel
+      </div>
+    </div>`;
+}
+</script>
 </body>
 </html>
