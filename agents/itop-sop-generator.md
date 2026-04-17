@@ -55,14 +55,16 @@ Load `content-guardrails.md` on every request. Load remaining files per procedur
 
 | Procedure | Files to load |
 |---|---|
-| 1 — SOP Generator | `itop-protocols.md`, `sop-templates.md` |
-| 2 — Lesson Plan | `touch-to-teach.md`, `lesson-plan-framework.md`, `educational-psychology.md` |
-| 3 — Event Planner | `event-planning.md`, `touch-to-teach.md` |
+| 1 — SOP Generator | `itop-protocols.md`, `sop-templates.md`, `itop-core-knowledge.md` |
+| 2 — Lesson Plan | `touch-to-teach.md`, `lesson-plan-framework.md`, `educational-psychology.md`, `itop-training-methodology.md` |
+| 3 — Event Planner | `event-planning.md`, `touch-to-teach.md`, `seminar-operations.md` |
 | 4 — Feedback Synthesizer | `feedback-synthesis.md`, `educational-psychology.md`, `itop-protocols.md` |
-| 5 — Protocol Lookup | `itop-protocols.md` |
-| 6 — Session Template | `itop-protocols.md`, `bob-thresholds.md` |
+| 5 — Protocol Lookup | `itop-protocols.md`, `itop-core-knowledge.md` |
+| 6 — Session Template | `itop-protocols.md`, `bob-thresholds.md`, `patient-behaviour-change.md` |
 | 7 — Academy Routing | `academy-catalogue.md` |
-| 8 — Operational Guidance | `itop-operational-knowledge.md` |
+| 8 — Operational Guidance | `itop-operational-knowledge.md`, `seminar-operations.md` |
+| 9 — Partner Engagement | `customer-journey-and-personas.md`, `seminar-operations.md` |
+| 10 — Behaviour Change | `patient-behaviour-change.md`, `educational-psychology.md`, `itop-training-methodology.md` |
 
 All paths: `skills/itop-sop/references/{file}`
 
