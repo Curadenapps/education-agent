@@ -1,117 +1,86 @@
-# iTOP SOP Generator
+# iTOP Agent
 
-An AI assistant for the Curaden iTOP methodology. It helps you create SOPs, lesson plans, training events, and synthesize feedback — all saved directly to Google Drive.
-
-**You do not need to understand GitHub to use this.** This page is just where the assistant lives. Your actual outputs go to Google Drive.
+An AI assistant for the Curaden iTOP (Individually Trained Oral Prophylaxis) methodology. Helps Curaden Partners, iTOP Lecturers, Instructors, Academy staff, and sales representatives with seminar operations, staff certification, patient behaviour change, instructor development, and partner engagement.
 
 ---
 
 ## What does this assistant do?
 
-Ask it to help with any of the following:
-
 | What you want | Say something like |
 |---|---|
-| Write a clinical SOP or guideline | *"Create an SOP for the Modified Bass technique"* |
-| Build a hands-on lesson plan | *"Create a 60-minute lesson plan on interdental care for hygienists"* |
-| Plan a training event or CPD day | *"Plan a half-day iTOP workshop for 12 dentists"* |
-| Summarise feedback into best practices | *"Here is feedback from 3 practitioners — synthesise into tips and tricks"* |
-| Look up an iTOP protocol step | *"What are the iTOP steps for a follow-up session?"* |
-| Generate a patient session template | *"Create an initial session template with BOB score 18%"* |
-| Apply COM-B to a patient case | *"My patient understands the technique but isn't doing it at home — what's blocking them?"* |
-| Write a patient implementation intention | *"Help me close this session with a specific one-thing plan for this patient"* |
-| Structure a follow-up conversation | *"How should I open the follow-up conversation after a first IDB session?"* |
-| Reframe a BOB result for a patient | *"My patient's BOB dropped from 28 to 14 — how do I present this?"* |
-| Find a Curaden Academy course | *"What Academy courses cover BOB measurement for beginners?"* |
-| Check if a seminar plan is compliant | *"Can I run an iTOP Introductory with 1 instructor for 15 people?"* |
-| Understand certification pathways | *"How do I become an iTOP Lecturer?"* |
-| Get a before/during/after checklist | *"What do I need to do before my iTOP seminar next month?"* |
-| Check brand or logo rules | *"Can I use the iTOP logo alongside the CURAPROX logo?"* |
-| Understand a technique | *"Walk me through the Bass technique step by step"* |
+| Understand iTOP's core purpose | *"Why does iTOP exist? What is the knowledge–behaviour gap?"* |
+| Check seminar compliance | *"Can I run an iTOP Introductory with 1 instructor for 15 people?"* |
+| Plan a training event | *"Plan a full-day iTOP Introductory seminar for 12 dentists"* |
+| Understand the Advanced programme | *"Walk me through the iTOP Advanced programme structure"* |
+| Learn about the Jenga exercise | *"How does the Jenga Clinical Tower work in the Advanced seminar?"* |
+| Build a lesson plan | *"Create a 90-minute T2T lesson plan on interdental care"* |
+| Generate an SOP | *"Create an SOP for the Modified Bass technique"* |
+| Apply behaviour science | *"My patient understands the technique but isn't doing it at home — what's blocking them?"* |
+| Write a patient plan | *"Help me close this session with a specific one-thing plan for this patient"* |
+| Structure a follow-up | *"How should I open the follow-up conversation after a first IDB session?"* |
+| Reframe a BOB result | *"My patient's BOB dropped from 28 to 14 — how do I present this?"* |
+| Understand instructor methodology | *"Explain minimum viable correctness and when to use it"* |
+| Apply the feedback principles | *"How should I give feedback during a T2T session without creating dependency?"* |
+| Identify a partner persona | *"My partner refuses to sell products in the clinic but is very engaged with the education — who is this?"* |
+| Engage a specific persona | *"How do I convince a prevention-sceptic clinic owner to attend iTOP Advanced?"* |
+| Navigate the customer journey | *"What should I do in the first 2 weeks after an iTOP seminar?"* |
+| Find Academy courses | *"What Academy course covers advanced patient coaching for a certified Instructor?"* |
+| Check certification pathways | *"How do I become an iTOP Lecturer?"* |
+| Check brand rules | *"Can I use the iTOP logo alongside the CURAPROX logo?"* |
 
 ---
 
-## Where do my outputs go?
+## What this assistant will NOT do
 
-Everything the assistant generates is saved to your Google Drive folder:
-
-```
-Google Drive → iTOP Agent folder (shared)
-    ├── SOPs/
-    ├── Lesson-Plans/
-    ├── Events/
-    ├── Feedback/
-    └── Session-Templates/
-```
-
-You do not need to copy or save anything manually.
+- **Never diagnose** a patient condition
+- **Never prescribe** a product or treatment
+- **Always mark** patient-facing content as `[CLINICIAN REVIEW REQUIRED]`
+- **Never invent** protocol steps — if something isn't in the knowledge base, it will say so
+- **Flag** any feedback that contradicts approved iTOP protocols rather than quietly accepting it
+- **Never deliver iTOP dogmatically** — the agent explains principles and decision-making frameworks, not rigid rules
 
 ---
 
-## Important: What this assistant will NOT do
-
-This assistant is designed to support clinicians, not replace them.
-
-- It will **never diagnose** a patient condition
-- It will **never prescribe** a product or treatment
-- It will **always mark** patient-facing content as `[CLINICIAN REVIEW REQUIRED]`
-- It will **never invent** protocol steps — if something isn't in the iTOP Guidelines, it will tell you
-- It will **flag** any feedback that contradicts approved iTOP protocols rather than quietly accepting it
-
----
-
-## The teaching philosophy: Touch to Teach
-
-All lesson plans and training events this assistant creates follow a hands-on-first approach:
-
-1. **Observe** — Watch the instructor demonstrate on a model (typodont) first
-2. **Guided practice** — Try it yourself while the instructor physically guides your hands
-3. **Independent practice** — Practise on your own while the instructor coaches
-4. **Feedback** — Structured review of what to improve
-
-At least 60% of every session must be hands-on. The assistant will flag any plan that falls below this.
-
-Technology (apps, screens, digital tools) is noted as a **future enhancement** — current training is entirely hands-on.
-
----
-
-## Reference content
-
-All key iTOP content has been loaded from the iTOP Guidelines 2024 and the Introduction Brochure:
-
-- **Protocols** — Bass technique, IDB, Solo, Loop floss, IAP/IAC measurement
-- **Operational rules** — T2T ratios, certification pathways, seminar requirements, brand rules, HQ contacts
-- **Course catalogue** — iTOP Info, Introductory, Advanced, Recall, Educator
-
-To update any of this content, edit the relevant file in `skills/itop-sop/references/`.
-
----
-
-## File structure (for the technical team)
+## File structure
 
 ```
 itop-agent/
 ├── agents/
-│   └── itop-sop-generator.md       ← Main agent definition
+│   ├── itop-agent-persona.md           ← Agent identity, capabilities, hard rules
+│   └── itop-sop-generator.md           ← SOP generation procedures
 └── skills/
     └── itop-sop/
         └── references/
-            ├── itop-protocols.md               ← Bass, IDB, Solo, Loop floss, IAP/IAC steps
-            ├── bob-thresholds.md               ← BOB/PCR/MGI scoring thresholds
-            ├── sop-templates.md                ← SOP document structure
-            ├── touch-to-teach.md               ← Hands-on teaching framework
-            ├── lesson-plan-framework.md        ← Lesson plan structure & objectives
-            ├── event-planning.md               ← Event layout & run sheet templates
-            ├── feedback-synthesis.md           ← Feedback collection & synthesis
-            ├── educational-psychology.md       ← Learning science: spaced repetition, COM-B, micro goals, follow-up
-            ├── patient-behaviour-change.md     ← COM-B model, patient session arc, implementation intentions, BOB reframing
-            ├── content-guardrails.md           ← Clinical & educational safety rules
-            ├── itop-operational-knowledge.md   ← Ratios, certification, brand, contacts
-            └── academy-catalogue.md            ← iTOP course listings (Intro, Advanced, Recall, Educator)
+            ├── itop-core-knowledge.md              ← Philosophy, three criteria, programme structures, T2T, active learning
+            ├── itop-training-methodology.md        ← Skill acquisition model, feedback, time management, COMPASS facilitation
+            ├── seminar-operations.md               ← Customer journey, checklists, materials, ratios, pricing, contacts
+            ├── customer-journey-and-personas.md    ← 8 dental professional personas, partner engagement, CRM, KPIs
+            ├── patient-behaviour-change.md         ← COM-B, HAPA, session arc, implementation intentions, BOB reframing
+            ├── educational-psychology.md           ← Motor learning, guidance hypothesis, deliberate practice, MI
+            ├── itop-protocols.md                   ← Bass, IDB, Solo, Loop floss, IAP/IAC, session structure
+            ├── bob-thresholds.md                   ← BOB/PCR/MGI thresholds and intervention mapping
+            ├── sop-templates.md                    ← SOP document structure
+            ├── lesson-plan-framework.md            ← Lesson plan structure and objectives
+            ├── touch-to-teach.md                   ← ODPF hands-on teaching framework
+            ├── event-planning.md                   ← Event layout and run sheet templates
+            ├── feedback-synthesis.md               ← Feedback collection and synthesis
+            ├── content-guardrails.md               ← Clinical and educational safety rules
+            ├── itop-operational-knowledge.md       ← Ratios, certification, brand, contacts
+            └── academy-catalogue.md                ← iTOP course listings
 ```
+
+---
+
+## Architecture
+
+- **GitHub** (`github.com/Curadenapps/itop-agent`) — canonical source for all agent files
+- **Dropbox** — human-facing working file storage for the team
+- **Claude Projects** — operational layer for non-technical users
+
+To update any knowledge content, edit the relevant file in `skills/itop-sop/references/` and commit to the main branch.
 
 ---
 
 ## Questions?
 
-Contact the Curaden digital team or refer to the iTOP Guidelines 2024 for clinical content queries.
+Contact the Curaden digital team or refer to the iTOP Official Document Series for clinical and educational content queries.

@@ -1,8 +1,8 @@
 # Patient Behaviour Change Framework
 
-> Source: Barbara Olejarová / Mario guidelines collaboration, April 2025
-> Applies to iTOP patient sessions, clinician training, and lesson plan design.
-> These principles extend the clinical iTOP protocols — they do not replace them.
+Source: Barbara Olejarová / Mário Rui Araújo guidelines collaboration, 2025; West & Michie COM-B (2020); Araújo et al. IOC RCT (2016); Araújo et al. HAPA study (2020); Newton & Asimakopoulou systematic review (2015); Dombrowski et al. Form of Delivery (2016)
+Applies to iTOP patient sessions, clinician training, and lesson plan design.
+These principles extend the clinical iTOP protocols — they do not replace them.
 
 ---
 
@@ -12,21 +12,28 @@ Traditional iTOP and BOB methodology operates on a flawed assumption:
 
 > *Explain → Show data → Patient acts*
 
-Evidence from behavioural science and motor learning is clear: **knowledge alone does not sustain behaviour.** A patient who understands why interdental brushing matters and has been shown their BOB score will not necessarily brush interdentally. Understanding and doing are governed by different systems.
+Behavioural science and motor learning evidence is clear: **knowledge alone does not sustain behaviour.** A patient who understands why interdental brushing matters and has been shown their BOB score will not necessarily brush interdentally. Understanding and doing are governed by different systems.
 
-The clinician's job is not to inform — it is to make the behaviour possible, easy, and worth repeating.
+Scientific evidence confirms this gap:
+- Newton & Asimakopoulou (2015) systematic review: goal setting, self-monitoring, and planning are the effective interventions — not information provision alone
+- Araújo et al. (2016) RCT: use of intra-oral camera significantly improved self-efficacy and flossing behaviour vs. control group — visible feedback loop, not knowledge transfer
+- Araújo et al. (2020) HAPA study: coping planning and action control mediated oral hygiene behaviour over 4 months — intention alone was insufficient
+
+**The clinician's job is not to inform — it is to make the behaviour possible, easy, and worth repeating.**
 
 ---
 
 ## The COM-B Model in iTOP Patient Sessions
 
-Behaviour only occurs when all three of the following are present simultaneously:
+Behaviour only occurs when all three of the following are present simultaneously. If any one is missing, the behaviour will not be adopted or maintained — regardless of how well the clinical instruction was delivered.
 
 | Component | Definition | What blocks it in oral hygiene |
 |-----------|-----------|-------------------------------|
 | **Capability** | Physical and psychological ability to perform the behaviour | Wrong brush size, poor dexterity, no practice beyond the chair |
 | **Opportunity** | Environmental and social conditions that allow the behaviour | Brush not visible at home, no routine slot, no partner support |
 | **Motivation** | Reflective goals and automatic impulses that activate the behaviour | Goal is clinician's (healthy gums), not patient's (fresh breath, no dental bills) |
+
+Source: West & Michie (2020). Capability and opportunity act as logic gates — both must be open for motivation to generate the behaviour.
 
 ### Applying COM-B in a patient session
 
@@ -41,19 +48,48 @@ The answer tells you which component to address first.
 **Step 2 — Address Opportunity, not just Capability**
 
 T2T handles capability well. Opportunity is currently absent from iTOP methodology. Before the patient leaves:
-- Confirm where they will keep the brush (bathroom counter, not in a drawer)
-- Confirm when in their existing routine this will happen (after brushing, not as a separate task)
+- Confirm where they will keep the brush (bathroom counter — not in a drawer)
+- Confirm when in their existing routine this will happen (after brushing — not as a separate task)
 - Anticipate one obstacle: *"What might get in the way this week?"*
 
 **Step 3 — Connect to the patient's own motivation**
 
 Motivation must be elicited, not delivered. Common patient motivations that are not clinical:
-- Avoiding expensive treatment
+- Avoiding expensive future treatment
 - Breath freshness and social confidence
 - Seeing a visible improvement quickly
 - Family member's concern
+- Aesthetic goals
 
 Frame the technique in the patient's own terms, not the clinician's.
+
+---
+
+## The Form of Delivery Matters
+
+Behaviour change interventions consist not only of content and theory, but also the **form of delivery (FoD)** — the provider, format, materials, setting, intensity, tailoring, and style.
+
+Source: Dombrowski et al. (2016). FoD is a crucial active ingredient, not an inert vehicle.
+
+**Implications for iTOP patient sessions:**
+- A technically correct demonstration in the wrong relational tone can undermine behaviour adoption
+- The setting, the rapport, and how the professional listens directly affect whether the behaviour change sticks
+- Tailoring delivery to the individual patient is part of the intervention, not separate from it
+
+---
+
+## The HAPA Model — Self-Regulation in Oral Hygiene
+
+The Health Action Process Approach (HAPA) distinguishes between:
+- **Motivational phase:** forming an intention based on outcome expectancies and self-efficacy
+- **Volitional phase:** translating intention into action through planning and self-regulation
+
+**Key finding (Araújo et al. 2020):** Coping planning and action control mediated oral hygiene behaviour over 4 months — even when controlling for intention.
+
+**iTOP application:** It is not enough to help patients form good intentions. They must also:
+1. Form a specific action plan (implementation intention)
+2. Plan for the obstacle they will face
+3. Have a way to monitor whether they followed through
 
 ---
 
@@ -61,11 +97,11 @@ Frame the technique in the patient's own terms, not the clinician's.
 
 **Never send a patient home with full-protocol instructions on the first session.**
 
-The gap between "correct instruction" and "achievable first step" is where most oral hygiene behaviour change fails. The clinician's job is to close that gap.
+The gap between "correct instruction" and "achievable first step" is where most oral hygiene behaviour change fails.
 
 ### Implementation intention format
 
-Every patient session closes with one specific, concrete plan — not an open instruction:
+Every patient session closes with one specific, concrete plan:
 
 ```
 "After [existing routine anchor], I will [specific tool] in [specific location]."
@@ -85,9 +121,21 @@ Example:
 
 ---
 
+## Coping Planning — Preparing for the Obstacle
+
+Beyond implementation intentions, patients who also plan for barriers show significantly better behaviour maintenance over time (HAPA model).
+
+**Before closing every session:**
+- *"What might get in the way of doing this tonight?"*
+- *"If that happens, what's your backup?"*
+
+This normalises non-compliance before it occurs, removes shame from the follow-up conversation, and signals that the clinician is a coach, not a compliance officer.
+
+---
+
 ## The Patient Session Arc
 
-Every patient-facing iTOP session should follow this arc — regardless of how much clinical content is covered:
+Every patient-facing iTOP session should follow this arc:
 
 ### 1. Connect (2–3 min)
 One open question about what the patient wants. Listen fully before moving to clinical assessment.
@@ -95,21 +143,20 @@ One open question about what the patient wants. Listen fully before moving to cl
 - Not: *"Let me show you your BOB score."*
 
 ### 2. One thing (10–15 min)
-Introduce one technique or one tool — not the full system. Use T2T on typodont first, then guide in-mouth if appropriate.
+Introduce one technique or one tool — not the full system. T2T on typodont first, then guided in-mouth.
 
 ### 3. Make a plan (2–3 min)
-Co-create a specific implementation intention. The patient says it back, not the clinician.
-- *"So what are you going to try tonight?"*
+Co-create a specific implementation intention. The patient says it back.
+- *"So what are you going to try tonight — and when?"*
 
 ### 4. Anticipate the obstacle (1–2 min)
-Normalise non-compliance and open the follow-up conversation before it's needed:
 - *"What might get in the way?"*
 - *"If it doesn't happen, that's fine — we'll figure out what to adjust."*
 
 ### 5. Follow up on the plan (next session)
 The first question at every follow-up is about the plan — not the BOB score.
 - *"Did you try the pink brush in those two gaps?"*
-- Then: celebrate or troubleshoot. Then: adjust the plan. Then: add one more thing if ready.
+- Then: celebrate or troubleshoot → adjust the plan → add one more thing if ready.
 
 ---
 
@@ -118,25 +165,46 @@ The first question at every follow-up is about the plan — not the BOB score.
 BOB% is a clinician metric. Use it clinically — do not lead with it in patient communication.
 
 | Clinician frame (avoid as opener) | Patient frame (use first) |
-|-----------------------------------|--------------------------|
+|-----------------------------------|--------------------------| 
 | "Your BOB is 23%" | "Your gums are bleeding in about 1 in 4 spots" |
 | "We need to get your BOB below 10%" | "The goal is gums that don't bleed when you brush" |
 | "Your score improved by 12 points" | "Your gums stopped bleeding in these areas — that's two weeks of your two-minute routine" |
 | Showing chart before asking | Asking how it felt, then showing chart to confirm |
 
-The number is yours to track. The story belongs to the patient — let them tell it first.
+**The score is yours to track. The story belongs to the patient — let them tell it first.**
+
+---
+
+## Appointment A vs Appointment B — Chronic Condition Design
+
+For patients with chronic oral health conditions, the design of each appointment matters differently.
+
+**Appointment A (initial instruction):** Assess the stability of the system before discharge
+- Is the implementation intention specific and achievable?
+- Is the opportunity addressed (where will the brush be, when will they use it)?
+- Is the patient motivated by their own goal, not the clinician's?
+- Is the patient equipped for the obstacle they will face?
+
+**Appointment B (follow-up):** Do not open with data — open with the person
+- Ask about the plan, not the score
+- Celebrate specifically what changed
+- Adjust the plan if needed, or add one more element if ready
+- Do not redesign the intervention from scratch — repair, adjust, extend
+
+**Key insight:** Behaviour breaks down between appointments due to: time load, competing demands, discomfort, low follow-up quality, weak alliance, loss of confidence. The Appointment A/B design should anticipate this fragility, not assume instruction was sufficient.
 
 ---
 
 ## Clinician Training Implications
 
-When training clinicians in iTOP, ensure the following are covered alongside technique instruction:
+When training clinicians in iTOP, ensure alongside technique instruction:
 
-- **COM-B framing** — clinicians can identify which component is blocking a specific patient
-- **Implementation intention scripting** — practice closing a session with a specific micro goal
-- **Obstacle elicitation** — practice asking "what might get in the way?" without it feeling like doubt in the patient
-- **Follow-up as coaching** — the first follow-up question is about the plan, not the data
-- **BOB as conversation starter** — not as the primary motivational tool
+- **COM-B framing** — identify which component is blocking a specific patient
+- **Implementation intention scripting** — practice closing sessions with a specific micro goal
+- **Coping planning elicitation** — practice "what might get in the way?" without creating doubt
+- **Follow-up as coaching** — first follow-up question is about the plan, not the data
+- **BOB as conversation starter** — not the primary motivational tool
+- **HAPA application** — motivational vs. volitional phase distinction
 
 ### Instructor prompt library
 
@@ -148,6 +216,7 @@ When training clinicians in iTOP, ensure the following are covered alongside tec
 | Anticipating obstacles | *"What might get in the way? And if it does, what's your fallback?"* |
 | Follow-up opening | *"Did you try it? What happened?"* |
 | Sharing BOB result | *"Your score went from X to Y — does that match how your gums have been feeling?"* |
+| COM-B diagnosis | *"Which of the three — capability, opportunity, or motivation — do you think is the actual barrier for this patient?"* |
 
 ---
 
