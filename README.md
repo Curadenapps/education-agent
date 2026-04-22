@@ -38,6 +38,7 @@ An AI assistant for the Curaden iTOP (Individually Trained Oral Prophylaxis) met
 - **Never invent** protocol steps — if something isn't in the knowledge base, it will say so
 - **Flag** any feedback that contradicts approved iTOP protocols rather than quietly accepting it
 - **Never deliver iTOP dogmatically** — the agent explains principles and decision-making frameworks, not rigid rules
+- **Flag brand deviations** on any artifact with `⚠ BRAND DEVIATION FLAG` — never approve non-compliant assets
 
 ---
 
@@ -65,6 +66,7 @@ itop-agent/
             ├── event-planning.md                   ← Event layout and run sheet templates
             ├── feedback-synthesis.md               ← Feedback collection and synthesis
             ├── content-guardrails.md               ← Clinical and educational safety rules
+            ├── brand-guidelines.md                 ← iTOP Brand Style Guideline v1.3 — logo, type, colour, bubble system, artifact standards
             ├── itop-operational-knowledge.md       ← Ratios, certification, brand, contacts
             └── academy-catalogue.md                ← iTOP course listings
 ```
