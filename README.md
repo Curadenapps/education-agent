@@ -1,4 +1,4 @@
-# iTOP Agent
+# Curaden Education Agent
 
 An AI assistant for the Curaden iTOP (Individually Trained Oral Prophylaxis) methodology. Helps Curaden Partners, iTOP Lecturers, Instructors, Academy staff, and sales representatives with seminar operations, staff certification, patient behaviour change, instructor development, and partner engagement.
 
@@ -44,10 +44,10 @@ An AI assistant for the Curaden iTOP (Individually Trained Oral Prophylaxis) met
 ## File structure
 
 ```
-itop-agent/
+education-agent/
 ├── agents/
-│   ├── itop-agent-persona.md           ← Agent identity, capabilities, hard rules
-│   └── itop-sop-generator.md           ← SOP generation procedures
+│   ├── education-agent-persona.md           ← Agent identity, capabilities, hard rules
+│   └── education-agent.md           ← SOP generation procedures
 └── skills/
     └── itop-sop/
         └── references/

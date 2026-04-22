@@ -44,7 +44,7 @@ GitHub is the version-control and review layer. Notion is the live knowledge lay
 │                      GITHUB REPO                             │
 │           (Version control + update mechanism)               │
 │                                                              │
-│   Curadenapps/itop-agent                                     │
+│   Curadenapps/education-agent                                     │
 │   .md files = draft, reviewed, versioned knowledge          │
 │   PRs = review layer before content goes live                │
 │   Monthly GitHub Action pushes approved content → Notion    │
