@@ -1,0 +1,177 @@
+name: Sync .md references to Notion
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**/*.md"
+  schedule:
+    # 1st of each month at 06:00 UTC
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Determine changed files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Full sync on schedule or manual trigger
+            echo "files=$(find skills -name '*.md' | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+          else
+            git diff --name-only HEAD~1 HEAD -- 'skills/**/*.md' > /tmp/changed.txt
+            echo "files=$(cat /tmp/changed.txt | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Sync changed files to Notion
+        if: steps.changed.outputs.files != ''
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_INTEGRATION_TOKEN }}
+          NOTION_ASSETS_DB_ID: ${{ secrets.NOTION_ASSETS_DB_ID }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, json, urllib.request, urllib.error, time, re
+          from pathlib import Path
+
+          TOKEN = os.environ["NOTION_TOKEN"]
+          DB_ID = os.environ["NOTION_ASSETS_DB_ID"]
+          COMMIT_MSG = os.environ.get("COMMIT_MESSAGE", "")[:2000]
+          FILES = os.environ.get("files", "").split()
+
+          HEADERS = {
+              "Authorization": f"Bearer {TOKEN}",
+              "Notion-Version": "2022-06-28",
+              "Content-Type": "application/json"
+          }
+
+          MAPPING_FILE = Path("skills/notion-mapping.json")
+          mapping = json.loads(MAPPING_FILE.read_text()) if MAPPING_FILE.exists() else {}
+
+          def req(method, path, body=None, retries=3):
+              url = f"https://api.notion.com/v1{path}"
+              data = json.dumps(body, ensure_ascii=False).encode() if body else None
+              for attempt in range(retries):
+                  try:
+                      r = urllib.request.Request(url, data=data, headers=HEADERS, method=method)
+                      with urllib.request.urlopen(r) as resp:
+                          return json.loads(resp.read())
+                  except urllib.error.HTTPError as e:
+                      if e.code in (429, 500, 502, 503):
+                          time.sleep(2 ** attempt)
+                          continue
+                      raise RuntimeError(f"HTTP {e.code}: {e.read().decode()}") from e
+              raise RuntimeError("Max retries exceeded")
+
+          def rich_text(content):
+              return [{"type": "text", "text": {"content": content[:2000]}}]
+
+          def para_block(text):
+              return {"object": "block", "type": "paragraph",
+                      "paragraph": {"rich_text": rich_text(text)}}
+
+          def heading_block(level, text):
+              return {"object": "block", "type": level,
+                      level: {"rich_text": rich_text(text)}}
+
+          def list_block(btype, text):
+              return {"object": "block", "type": btype,
+                      btype: {"rich_text": rich_text(text)}}
+
+          def md_to_blocks(md):
+              blocks = []
+              lines = md.splitlines()
+              i = 0
+              while i < len(lines):
+                  line = lines[i]
+                  if line.strip().startswith("```"):
+                      lang = line.strip()[3:].strip()
+                      code_lines, i = [], i + 1
+                      while i < len(lines) and not lines[i].strip().startswith("```"):
+                          code_lines.append(lines[i])
+                          i += 1
+                      blocks.append({"object": "block", "type": "code",
+                          "code": {"language": lang or "plain text",
+                                   "rich_text": rich_text("\n".join(code_lines))}})
+                  elif re.match(r'^### ', line):
+                      blocks.append(heading_block("heading_3", line[4:]))
+                  elif re.match(r'^## ', line):
+                      blocks.append(heading_block("heading_2", line[3:]))
+                  elif re.match(r'^# ', line):
+                      blocks.append(heading_block("heading_1", line[2:]))
+                  elif re.match(r'^[-*]{3,}\s*$', line):
+                      blocks.append({"object": "block", "type": "divider", "divider": {}})
+                  elif re.match(r'^[-*+] ', line):
+                      blocks.append(list_block("bulleted_list_item", line[2:].strip()))
+                  elif re.match(r'^\d+\. ', line):
+                      blocks.append(list_block("numbered_list_item", re.sub(r'^\d+\. ', '', line).strip()))
+                  elif line.startswith("> "):
+                      blocks.append({"object": "block", "type": "quote",
+                          "quote": {"rich_text": rich_text(line[2:].strip())}})
+                  elif line.strip() == "":
+                      if blocks and blocks[-1]["type"] != "paragraph":
+                          blocks.append(para_block(""))
+                  else:
+                      blocks.append(para_block(line))
+                  i += 1
+              return blocks
+
+          def clear_page_body(page_id):
+              resp = req("GET", f"/blocks/{page_id}/children?page_size=100")
+              block_ids = [b["id"] for b in resp.get("results", [])]
+              for bid in block_ids:
+                  req("DELETE", f"/blocks/{bid}")
+                  time.sleep(0.1)
+
+          def append_blocks(page_id, blocks, chunk=95):
+              for start in range(0, len(blocks), chunk):
+                  req("PATCH", f"/blocks/{page_id}/children",
+                      {"children": blocks[start:start + chunk]})
+                  time.sleep(0.3)
+
+          updated, skipped, errors = [], [], []
+
+          for filepath in FILES:
+              filepath = filepath.strip()
+              if not filepath or not filepath.endswith(".md"):
+                  continue
+              page_id = mapping.get(filepath)
+              if not page_id:
+                  print(f"  SKIP (not in mapping): {filepath}")
+                  skipped.append(filepath)
+                  continue
+              try:
+                  md = Path(filepath).read_text(encoding="utf-8")
+                  print(f"  Updating: {filepath}")
+                  clear_page_body(page_id)
+                  blocks = md_to_blocks(md)
+                  append_blocks(page_id, blocks)
+                  # Set Status = In Review and log commit message
+                  props = {"Status": {"select": {"name": "In Review"}}}
+                  if COMMIT_MSG:
+                      props["Change Log"] = {"rich_text": rich_text(COMMIT_MSG)}
+                  req("PATCH", f"/pages/{page_id}", {"properties": props})
+                  print(f"    OK  https://www.notion.so/{page_id.replace('-', '')}")
+                  updated.append(filepath)
+              except Exception as e:
+                  print(f"    ERROR: {e}")
+                  errors.append((filepath, str(e)))
+
+          print(f"\nUpdated: {len(updated)}  Skipped: {len(skipped)}  Errors: {len(errors)}")
+          if errors:
+              for f, e in errors:
+                  print(f"  ERROR {f}: {e}")
+              exit(1)
+          PYEOF
+        env:
+          files: ${{ steps.changed.outputs.files }}
