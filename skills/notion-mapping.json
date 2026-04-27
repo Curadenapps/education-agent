@@ -1,14 +1,17 @@
 {
-  "skills/itop-sop/references/academy-catalogue.md": "34d7e8aa-bbb4-812b-a6c6-f51c78984e5b",
-  "skills/itop-sop/references/bob-thresholds.md": "34d7e8aa-bbb4-813b-9454-f2c1db9cf2bd",
-  "skills/itop-sop/references/content-guardrails.md": "34d7e8aa-bbb4-8156-87f0-cd39f2693960",
+  "_comment": "Maps each GitHub .md file path to its Notion Asset page ID. Excludes 2 archived records: Seminar Operations and Customer Journey & Curaden Personas. Commit this file to skills/notion-mapping.json in the repo.",
+  "skills/itop-sop/references/itop-core-knowledge.md": "34d7e8aa-bbb4-8139-8034-d6ee9f52e1a4",
+  "skills/itop-sop/references/itop-training-methodology.md": "34d7e8aa-bbb4-8191-b71b-fc3486c97a0b",
+  "skills/itop-sop/references/patient-behaviour-change.md": "34d7e8aa-bbb4-81d0-bac7-d807d044bf91",
   "skills/itop-sop/references/educational-psychology.md": "34d7e8aa-bbb4-816c-84be-c28124572e3c",
+  "skills/itop-sop/references/itop-protocols.md": "34d7e8aa-bbb4-811a-b204-cabe0118bc27",
+  "skills/itop-sop/references/bob-thresholds.md": "34d7e8aa-bbb4-813b-9454-f2c1db9cf2bd",
+  "skills/itop-sop/references/sop-templates.md": "34d7e8aa-bbb4-8115-8053-d5446d0d88d2",
+  "skills/itop-sop/references/lesson-plan-framework.md": "34d7e8aa-bbb4-8175-bd45-d138343f8562",
+  "skills/itop-sop/references/touch-to-teach.md": "34d7e8aa-bbb4-8179-b02f-fd3288d6db7e",
   "skills/itop-sop/references/event-planning.md": "34d7e8aa-bbb4-818f-aa16-ca853defd948",
   "skills/itop-sop/references/feedback-synthesis.md": "34d7e8aa-bbb4-81fc-a16a-ce3dd6b8ef81",
+  "skills/itop-sop/references/content-guardrails.md": "34d7e8aa-bbb4-8156-87f0-cd39f2693960",
   "skills/itop-sop/references/itop-operational-knowledge.md": "34d7e8aa-bbb4-8162-9424-fd994257a4f8",
-  "skills/itop-sop/references/itop-protocols.md": "34d7e8aa-bbb4-811a-b204-cabe0118bc27",
-  "skills/itop-sop/references/lesson-plan-framework.md": "34d7e8aa-bbb4-8175-bd45-d138343f8562",
-  "skills/itop-sop/references/patient-behaviour-change.md": "34d7e8aa-bbb4-81d0-bac7-d807d044bf91",
-  "skills/itop-sop/references/sop-templates.md": "34d7e8aa-bbb4-8115-8053-d5446d0d88d2",
-  "skills/itop-sop/references/touch-to-teach.md": "34d7e8aa-bbb4-8179-b02f-fd3288d6db7e"
+  "skills/itop-sop/references/academy-catalogue.md": "34d7e8aa-bbb4-812b-a6c6-f51c78984e5b"
 }
