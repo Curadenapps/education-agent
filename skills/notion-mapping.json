@@ -1,5 +1,5 @@
 {
-  "_comment": "Maps each GitHub .md file path to its Notion Asset page ID. Excludes 2 archived records: Seminar Operations and Customer Journey & Curaden Personas. Commit this file to skills/notion-mapping.json in the repo.",
+  "_comment": "Maps each original .md draft to its Notion knowledge page ID. The Notion pages are the working copy now (see ARCHITECTURE.md); this file is reference only.",
   "skills/itop-sop/references/itop-core-knowledge.md": "34d7e8aa-bbb4-8139-8034-d6ee9f52e1a4",
   "skills/itop-sop/references/itop-training-methodology.md": "34d7e8aa-bbb4-8191-b71b-fc3486c97a0b",
   "skills/itop-sop/references/patient-behaviour-change.md": "34d7e8aa-bbb4-81d0-bac7-d807d044bf91",
@@ -13,5 +13,8 @@
   "skills/itop-sop/references/feedback-synthesis.md": "34d7e8aa-bbb4-81fc-a16a-ce3dd6b8ef81",
   "skills/itop-sop/references/content-guardrails.md": "34d7e8aa-bbb4-8156-87f0-cd39f2693960",
   "skills/itop-sop/references/itop-operational-knowledge.md": "34d7e8aa-bbb4-8162-9424-fd994257a4f8",
-  "skills/itop-sop/references/academy-catalogue.md": "34d7e8aa-bbb4-812b-a6c6-f51c78984e5b"
+  "skills/itop-sop/references/academy-catalogue.md": "34d7e8aa-bbb4-812b-a6c6-f51c78984e5b",
+  "skills/itop-sop/references/seminar-operations.md": "34e7e8aa-bbb4-81c0-9a1d-e8219e079cbf",
+  "skills/itop-sop/references/customer-journey-and-personas.md": "34e7e8aa-bbb4-8177-a3ed-d1032502a683",
+  "skills/itop-sop/references/brand-guidelines.md": "34d7e8aa-bbb4-814a-95fb-e20aff745733"
 }

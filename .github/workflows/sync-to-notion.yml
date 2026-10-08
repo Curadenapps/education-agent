@@ -1,13 +1,9 @@
 name: Sync .md references to Notion
 
+# LEGACY - manual only. The Notion knowledge pages are now the working copy (Google
+# Drive holds the source documents; see ARCHITECTURE.md). Pushing these .md drafts
+# would overwrite edits made in Notion. Refresh the .md files from Notion first.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "skills/**/*.md"
-  schedule:
-    # 1st of each month at 06:00 UTC
-    - cron: "0 6 1 * *"
   workflow_dispatch:
 
 jobs:
