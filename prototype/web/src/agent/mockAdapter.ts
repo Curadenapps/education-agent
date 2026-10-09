@@ -4,7 +4,7 @@
  * skills/itop-sop/references/) and is labelled as sample output in the UI.
  */
 import { PROCEDURES } from './procedures';
-import type { AgentAdapter, AgentDocument, AgentEvent, AgentRequest, ProcedureId, Source } from './types';
+import type { AgentAdapter, AgentDocument, AgentEvent, AgentRequest, ProcedureId, ReformatStyle, Source } from './types';
 
 interface Script {
   text: string;
@@ -271,6 +271,76 @@ If you can only get 2 Instructors, cap registration at 16.`,
   }),
 };
 
+/* ── Reformatting (demo): simple text transforms so versions can be compared ── */
+
+const stripCites = (t: string) => t.replace(/\s*\*\[[^\]]*\]\*/g, '').trim();
+const titleOf = (doc: AgentDocument) => doc.title.replace(/^(Checklist|Short version|Patient handout) — /, '');
+
+function reformatDoc(doc: AgentDocument, style: ReformatStyle): { text: string; doc: Omit<AgentDocument, 'id' | 'createdAt'> } {
+  const base = { procedure: doc.procedure, sources: doc.sources, version: (doc.version ?? 1) + 1, parentId: doc.id };
+  const name = titleOf(doc);
+
+  if (style === 'shorter') {
+    const sections = doc.body.split(/\n(?=## )/);
+    const body = sections
+      .map((sec, i) => {
+        const [head, ...rest] = sec.split('\n');
+        const keep = rest.filter((l) => l.trim() && !/^\|\s*-/.test(l)).slice(0, i === 0 ? 2 : 3);
+        return [head, ...keep.map(stripCites)].join('\n');
+      })
+      .join('\n\n');
+    return {
+      text: `Here is a shorter version of “${name}”: each section cut to its essentials. Sources and guardrail flags carry over.`,
+      doc: { ...base, title: `Short version — ${name}`, body, guardrail: doc.guardrail },
+    };
+  }
+
+  if (style === 'checklist') {
+    const items = doc.body
+      .split('\n')
+      .flatMap((l) => {
+        if (/^\s*([-*•]|\d+\.)\s+/.test(l)) return [l.replace(/^\s*([-*•]|\d+\.)\s+(\[[ xX]\]\s+)?/, '')];
+        if (/^\|/.test(l) && !/^\|\s*:?-/.test(l)) {
+          const c = l.split('|').map((x) => x.trim()).filter(Boolean);
+          return c.length > 1 && !/^(time|metric|block)$/i.test(c[0]) ? [c.slice(0, 3).join(' — ')] : [];
+        }
+        return [];
+      })
+      .map((t) => `- [ ] ${stripCites(t)}`);
+    return {
+      text: `I turned “${name}” into a tick-box checklist you can print and use on the day.`,
+      doc: { ...base, title: `Checklist — ${name}`, body: `# Checklist: ${name}\n\n${items.join('\n')}`, guardrail: doc.guardrail },
+    };
+  }
+
+  const steps = doc.body
+    .split('\n')
+    .filter((l) => /^\d+\.\s/.test(l))
+    .map((l) => stripCites(l));
+  const body = `# ${name}: at home
+
+Your clinician showed you this in the practice. Use this sheet as a reminder.
+
+## What to do
+${steps.length ? steps.join('\n') : '1. Follow the steps your clinician showed you.'}
+
+## Good to know
+- Take your time. Gentle movements work better than pressure.
+- A little bleeding at first can happen. Tell your clinician if it doesn't settle.
+- Bring this sheet to your next visit.
+
+[CLINICIAN REVIEW REQUIRED]`;
+  return {
+    text: `Here is a patient handout version in plain language. It is patient-facing, so it needs clinician review before you hand it out.`,
+    doc: {
+      ...base,
+      title: `Patient handout — ${name}`,
+      body,
+      guardrail: { status: 'FLAG', flags: ['Patient-facing content needs clinician review'] },
+    },
+  };
+}
+
 function route(text: string): ProcedureId {
   const t = text.toLowerCase();
   const hit = PROCEDURES.find((p) => p.keywords.some((k) => t.includes(k)));
@@ -303,6 +373,19 @@ export const mockAdapter: AgentAdapter = {
     const files = request.attachments ?? [];
 
     await sleep(600, signal); // "thinking"
+
+    if (request.reformat) {
+      const out = reformatDoc(request.reformat.document, request.reformat.style);
+      for (const c of chunks(out.text)) {
+        await sleep(35, signal);
+        yield { type: 'text', delta: c };
+      }
+      await sleep(300, signal);
+      yield { type: 'document', document: { ...out.doc, id: crypto.randomUUID(), createdAt: new Date().toISOString() } };
+      yield { type: 'sources', sources: out.doc.sources };
+      yield { type: 'done' };
+      return;
+    }
 
     if (files.length && !last.text.trim()) {
       const names = files.map((f) => f.name).join(', ');

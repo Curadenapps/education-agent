@@ -13,6 +13,14 @@ const PATHS: Record<string, string> = {
   arrow: 'M6 10h8M10 6l4 4-4 4',
   file: 'M6 3h5.5L15 6.5V17H6zM11 3v4h4',
   drive: 'M7.5 3.5h5l4.5 8-2.5 4.5h-9L3 11.5zM7.5 3.5l5 8.5M12.5 3.5L8 11.5M3 11.5h14',
+  back: 'M12 5l-5 5 5 5',
+  expand: 'M12 4h4v4M8 16H4v-4M16 4l-5 5M4 16l5-5',
+  collapse: 'M15 9h-4V5M5 11h4v4M11 9l5-5M9 11l-5 5',
+  download: 'M10 3v10M6 9l4 4 4-4M4 16h12',
+  chevron: 'M6 8l4 4 4-4',
+  share: 'M10 3v10M6 7l4-4 4 4M5 11v5h10v-5',
+  copy: 'M7 7h9v9H7zM4 13V4h9',
+  check: 'M4.5 10.5l3.5 3.5 7.5-8',
   book: 'M4 4.5c2-.8 4-.8 6 .5 2-1.3 4-1.3 6-.5V16c-2-.8-4-.8-6 .5-2-1.3-4-1.3-6-.5zM10 5v11.5',
 };
 

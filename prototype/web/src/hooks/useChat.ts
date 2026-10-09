@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { agent, procedureById } from '../agent';
-import type { AgentDocument, Attachment, ChatMessage, ProcedureId } from '../agent';
+import type { AgentDocument, AgentRequest, Attachment, ChatMessage, ProcedureId, ReformatStyle } from '../agent';
 
 export interface Conversation {
   id: string;
@@ -65,7 +65,10 @@ export function useChat() {
   );
 
   const send = useCallback(
-    async (text: string, opts: { procedure?: ProcedureId; attachments?: Attachment[] } = {}) => {
+    async (
+      text: string,
+      opts: { procedure?: ProcedureId; attachments?: Attachment[]; reformat?: AgentRequest['reformat'] } = {},
+    ) => {
       const trimmed = text.trim();
       const attachments = opts.attachments ?? [];
       if ((!trimmed && !attachments.length) || busy) return;
@@ -95,7 +98,7 @@ export function useChat() {
 
       try {
         for await (const event of agent.send(
-          { conversationId: conv.id, messages: history, procedure: opts.procedure, attachments },
+          { conversationId: conv.id, messages: history, procedure: opts.procedure, attachments, reformat: opts.reformat },
           controller.signal,
         )) {
           if (event.type === 'text') {
@@ -135,6 +138,25 @@ export function useChat() {
     [send],
   );
 
+  const REFORMAT_ASK: Record<ReformatStyle, string> = {
+    shorter: 'Make a shorter version of',
+    checklist: 'Turn this into a checklist:',
+    patient: 'Rewrite as a patient handout:',
+  };
+
+  const reformat = useCallback(
+    (document: AgentDocument, style: ReformatStyle) =>
+      send(`${REFORMAT_ASK[style]} “${document.title}”`, { procedure: document.procedure, reformat: { document, style } }),
+    [send],
+  );
+
+  /** Demo: records where the document would be saved in the output Drive folder. */
+  const markSaved = useCallback(
+    (docId: string, path: string) =>
+      patch(active.id, (c) => ({ ...c, documents: c.documents.map((d) => (d.id === docId ? { ...d, savedPath: path } : d)) })),
+    [active.id, patch],
+  );
+
   const stop = useCallback(() => abortRef.current?.abort(), []);
 
   const newConversation = useCallback(() => {
@@ -160,5 +182,5 @@ export function useChat() {
     [busy, activeId],
   );
 
-  return { conversations, active, busy, send, runProcedure, stop, newConversation, select, remove };
+  return { conversations, active, busy, send, runProcedure, reformat, markSaved, stop, newConversation, select, remove };
 }

@@ -37,7 +37,14 @@ export interface AgentDocument {
   guardrail: Guardrail;
   sources: Source[];
   createdAt: string;
+  /** 1 for the first draft; reformats create a new version that points back to its parent. */
+  version?: number;
+  parentId?: string;
+  /** Set once saved to the output Drive folder. */
+  savedPath?: string;
 }
+
+export type ReformatStyle = 'shorter' | 'checklist' | 'patient';
 
 export interface Attachment {
   name: string;
@@ -63,6 +70,8 @@ export interface AgentRequest {
   messages: ChatMessage[];
   procedure?: ProcedureId;
   attachments?: Attachment[];
+  /** Asks for a new version of an existing document. */
+  reformat?: { document: AgentDocument; style: ReformatStyle };
 }
 
 /** Streamed back in this order: text deltas, then optional document and sources, then done. */

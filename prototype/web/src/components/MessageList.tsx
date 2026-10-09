@@ -94,7 +94,9 @@ function AgentMessage({
               <span className="doc-card__title">{doc.title}</span>
             </span>
             <span className={`guard guard--${doc.guardrail.status.toLowerCase()}`}>{doc.guardrail.status}</span>
-            <Icon name="arrow" />
+            <span className="doc-card__open">
+              Open <Icon name="arrow" size={14} />
+            </span>
           </button>
         )}
 

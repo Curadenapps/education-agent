@@ -11,6 +11,8 @@ interface Props {
   onSend: (text: string, attachments: Attachment[]) => void;
   onProcedure: (id: ProcedureId) => void;
   onStop: () => void;
+  /** Puts text in the box (e.g. "Other change…" in the document panel). */
+  prefill?: { text: string; nonce: number };
 }
 
 const ACCEPT = '.pdf,.docx,.doc,.txt,.md,.pptx,.xlsx,.csv,.png,.jpg,.jpeg';
@@ -24,7 +26,7 @@ const SPEECH_HINT: Record<string, string> = {
   unsupported: 'Voice input needs Chrome or Edge.',
 };
 
-export function Composer({ busy, showChips, pendingFiles, onFilesChange, onSend, onProcedure, onStop }: Props) {
+export function Composer({ busy, showChips, pendingFiles, onFilesChange, onSend, onProcedure, onStop, prefill }: Props) {
   const [text, setText] = useState('');
   const [showHint, setShowHint] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -35,6 +37,14 @@ export function Composer({ busy, showChips, pendingFiles, onFilesChange, onSend,
     setText((baseRef.current ? baseRef.current + ' ' : '') + spoken);
   }, []);
   const speech = useSpeech(onSpeech);
+
+  useEffect(() => {
+    if (!prefill) return;
+    setText(prefill.text);
+    const el = inputRef.current;
+    el?.focus();
+    requestAnimationFrame(() => el?.setSelectionRange(prefill.text.length, prefill.text.length));
+  }, [prefill]);
 
   // Grow the textarea with its content, up to the CSS max-height.
   useEffect(() => {
@@ -107,7 +117,7 @@ export function Composer({ busy, showChips, pendingFiles, onFilesChange, onSend,
           className="composer__input"
           rows={1}
           value={text}
-          placeholder="Ask about a protocol, or describe the document you need…"
+          placeholder="Type, or tap the mic to speak…"
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
@@ -134,16 +144,6 @@ export function Composer({ busy, showChips, pendingFiles, onFilesChange, onSend,
             <button type="button" className="icon-btn" onClick={() => fileRef.current?.click()} title="Attach files" aria-label="Attach files">
               <Icon name="clip" />
             </button>
-            <button
-              type="button"
-              className={`icon-btn ${speech.state === 'listening' ? 'is-listening' : ''}`}
-              onClick={toggleMic}
-              title="Voice input"
-              aria-label={speech.state === 'listening' ? 'Stop voice input' : 'Start voice input'}
-              aria-pressed={speech.state === 'listening'}
-            >
-              <Icon name="mic" />
-            </button>
             {hint && <span className={`composer__hint ${speech.state === 'blocked' ? 'is-warn' : ''}`}>{hint}</span>}
           </div>
 
@@ -151,9 +151,21 @@ export function Composer({ busy, showChips, pendingFiles, onFilesChange, onSend,
             <button type="button" className="send send--stop" onClick={onStop} aria-label="Stop">
               <Icon name="stop" />
             </button>
-          ) : (
-            <button type="submit" className="send" disabled={!text.trim() && !pendingFiles.length} aria-label="Send">
+          ) : (text.trim() || pendingFiles.length) && speech.state !== 'listening' ? (
+            <button type="submit" className="send" aria-label="Send">
               <Icon name="send" />
+            </button>
+          ) : (
+            // Empty box: the main button is the microphone, so voice input is easy to find.
+            <button
+              type="button"
+              className={`send send--mic ${speech.state === 'listening' ? 'is-listening' : ''}`}
+              onClick={toggleMic}
+              aria-label={speech.state === 'listening' ? 'Stop voice input' : 'Speak your message'}
+              aria-pressed={speech.state === 'listening'}
+              title="Speak your message"
+            >
+              <Icon name="mic" />
             </button>
           )}
         </div>
