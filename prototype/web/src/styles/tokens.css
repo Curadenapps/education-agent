@@ -1,0 +1,123 @@
+/*
+  iTOP Brand Style Guidelines v1.3 (skills/itop-sop/references/brand-guidelines.md)
+  Ratio: White 50 · Navy 30 · Lime 14 · designation 6. Flat fills, circles, no gradients.
+  Type: Galaxie Polaris Book is licensed; Work Sans is the official fallback.
+  Layout: navy rail | white chat column | pale-blue document desk.
+*/
+:root {
+  /* Brand constants (same in both themes) */
+  --brand-navy: #0e2841;
+  --brand-lime: #bed243;
+  --brand-cyan: #00aed8;
+  --brand-coral: #ff6d6c;
+  --brand-sunflower: #ffda5e;
+  --brand-pale: #f1f4fb;
+
+  /* Surfaces */
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-soft: #f1f4fb;   /* Pale Blue: nested surfaces, document desk */
+  --surface-sunk: #e8ecf4;
+  --rail: #0e2841;           /* Navy sidebar */
+  --rail-fg: #f1f4fb;
+  --rail-muted: #9fb0c6;
+  --rail-hover: #17395b;
+
+  /* Text & lines */
+  --fg: #0e2841;
+  --fg-muted: #4f6278;
+  --fg-faint: #7b8a9c;
+  --line: #dde3ec;
+  --line-strong: #c3ccd9;
+
+  /* Accent & state */
+  --accent: #bed243;         /* Lime */
+  --accent-fg: #0e2841;      /* Navy text on lime */
+  --accent-soft: #eef4c9;
+  --user-bubble: #0e2841;
+  --user-fg: #ffffff;
+  --pass: #6f8a00;
+  --pass-bg: #eef4c9;
+  --flag: #8a6400;
+  --flag-bg: #fff3c4;
+  --danger: #e1000a;
+  --focus: #00aed8;
+
+  /* Bubbles (decoration) */
+  --bubble-anchor: #0e2841;
+  --bubble-feature: #bed243;
+
+  --font-sans: 'Work Sans', 'Galaxie Polaris', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 20px;
+  --rail-w: 264px;
+  --desk-w: 400px;
+  --shadow-pop: 0 8px 28px rgba(14, 40, 65, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0a1d30;
+    --surface: #0f2539;
+    --surface-soft: #122c45;
+    --surface-sunk: #16324d;
+    --rail: #071524;
+    --rail-fg: #f1f4fb;
+    --rail-muted: #8396ad;
+    --rail-hover: #12293f;
+    --fg: #eef2f8;
+    --fg-muted: #a9b7c8;
+    --fg-faint: #7e8fa3;
+    --line: #1f3a55;
+    --line-strong: #2c4b69;
+    --accent: #bed243;
+    --accent-fg: #0e2841;
+    --accent-soft: #2a3a1c;
+    --user-bubble: #bed243;
+    --user-fg: #0e2841;
+    --pass: #cfe06a;
+    --pass-bg: #2a3a1c;
+    --flag: #ffda5e;
+    --flag-bg: #3d3416;
+    --danger: #ff6d6c;
+    --focus: #00aed8;
+    --bubble-anchor: #17395b;
+    --bubble-feature: #bed243;
+    --shadow-pop: 0 8px 28px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0a1d30;
+  --surface: #0f2539;
+  --surface-soft: #122c45;
+  --surface-sunk: #16324d;
+  --rail: #071524;
+  --rail-fg: #f1f4fb;
+  --rail-muted: #8396ad;
+  --rail-hover: #12293f;
+  --fg: #eef2f8;
+  --fg-muted: #a9b7c8;
+  --fg-faint: #7e8fa3;
+  --line: #1f3a55;
+  --line-strong: #2c4b69;
+  --accent: #bed243;
+  --accent-fg: #0e2841;
+  --accent-soft: #2a3a1c;
+  --user-bubble: #bed243;
+  --user-fg: #0e2841;
+  --pass: #cfe06a;
+  --pass-bg: #2a3a1c;
+  --flag: #ffda5e;
+  --flag-bg: #3d3416;
+  --danger: #ff6d6c;
+  --focus: #00aed8;
+  --bubble-anchor: #17395b;
+  --bubble-feature: #bed243;
+  --shadow-pop: 0 8px 28px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
