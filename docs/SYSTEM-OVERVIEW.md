@@ -22,7 +22,7 @@ If anything disagrees, Drive wins.
 ## Ownership
 
 - **Notion/Drive session:** Notion pages, Drive links, daily health check, `agents/education-agent-persona.md` routing, `education-hub/agent/persona-v2.md`, `ARCHITECTURE.md`.
-- **This session:** this file, `README.md`, slimming `agents/education-agent.md`, `prototype/`.
+- **This session:** this file, `README.md`, `agents/education-agent-procedures.md`, `prototype/`.
 - Neither edits the other's files without asking first.
 
 ## Output folders
@@ -47,6 +47,6 @@ skills/itop-sop/references/  legacy drafts (read-only)
 
 ## Open items
 
-1. Decide whether the 518-line `agents/education-agent.md` is superseded by the persona file.
+1. ~~Old `agents/education-agent.md`~~ — done: slimmed to output formats as `agents/education-agent-procedures.md`.
 2. Wire the prototype to a real backend, or keep it as a static demo.
 3. Build Phase 3 (document panel) only after item 2.

@@ -47,7 +47,7 @@ An AI assistant for the Curaden iTOP (Individually Trained Oral Prophylaxis) met
 education-agent/
 ├── agents/
 │   ├── education-agent-persona.md           ← Agent identity, capabilities, hard rules
-│   └── education-agent.md           ← SOP generation procedures
+│   └── education-agent-procedures.md ← Output formats (SOP, lesson plan, event plan…)
 └── skills/
     └── itop-sop/
         └── references/
