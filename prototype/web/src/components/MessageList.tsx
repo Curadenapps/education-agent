@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { DOC_TYPE_LABEL, type AgentDocument, type ChatMessage } from '../agent';
+import { docNoun, type AgentDocument, type ChatMessage, type Source } from '../agent';
 import { Icon } from './Icon';
 import { RichText } from './RichText';
 
@@ -9,14 +9,14 @@ interface Props {
   onOpenDocument: (id: string) => void;
 }
 
-const fileSize = (bytes: number) =>
-  bytes > 1_000_000 ? `${(bytes / 1_000_000).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1000))} KB`;
+export const basedOn = (sources: Source[]) =>
+  sources.map((s) => (s.kind === 'drive' ? `${s.title} (Google Drive)` : s.title)).join(', ');
 
 export function MessageList({ messages, documents, onOpenDocument }: Props) {
   const endRef = useRef<HTMLDivElement>(null);
   const last = messages[messages.length - 1];
 
-  // Follow the stream as it grows.
+  // Follow the reply as it is written.
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
   }, [messages.length, last?.text, last?.documentId]);
@@ -27,10 +27,9 @@ export function MessageList({ messages, documents, onOpenDocument }: Props) {
         m.role === 'user' ? (
           <div key={m.id} className="msg msg--user">
             {m.attachments?.map((a) => (
-              <div key={a.name} className="file-chip file-chip--sent">
-                <Icon name="file" size={16} />
+              <div key={a.name} className="file-chip">
+                <Icon name="file" size={18} />
                 <span className="file-chip__name">{a.name}</span>
-                <span className="file-chip__size">{fileSize(a.size)}</span>
               </div>
             ))}
             {m.text && <div className="msg__bubble">{m.text}</div>}
@@ -62,56 +61,48 @@ function AgentMessage({
 
   return (
     <div className="msg msg--agent">
-      <div className="msg__avatar" aria-hidden>
-        <span className="msg__avatar-dot" />i
-      </div>
-      <div className="msg__body">
-        <div className="msg__who">
-          iTOP Agent
-          {m.status === 'stopped' && <span className="msg__state">Stopped</span>}
-          {m.status === 'error' && <span className="msg__state msg__state--error">Error</span>}
+      <div className="msg__who">iTOP Assistant</div>
+
+      {thinking ? (
+        <div className="typing">
+          <span className="typing__dots" aria-hidden>
+            <span />
+            <span />
+            <span />
+          </span>
+          Writing…
         </div>
+      ) : (
+        <div className={`msg__text ${m.status === 'streaming' ? 'is-streaming' : ''}`}>
+          <RichText text={m.text} />
+        </div>
+      )}
+      {m.status === 'stopped' && <p className="msg__note">You stopped this answer.</p>}
+      {m.status === 'error' && <p className="msg__note msg__note--error">Something went wrong. Please try again.</p>}
 
-        {thinking ? (
-          <div className="typing" aria-label="Agent is writing">
-            <span />
-            <span />
-            <span />
-          </div>
-        ) : (
-          <div className={`msg__text ${m.status === 'streaming' ? 'is-streaming' : ''}`}>
-            <RichText text={m.text} />
-          </div>
-        )}
-
-        {doc && (
-          <button className="doc-card" onClick={() => onOpenDocument(doc.id)}>
+      {doc && (
+        <div className="doc-card">
+          <div className="doc-card__head">
             <span className="doc-card__icon">
-              <Icon name="doc" />
+              <Icon name="doc" size={22} />
             </span>
             <span className="doc-card__text">
-              <span className="eyebrow">{DOC_TYPE_LABEL[doc.procedure]} · ready</span>
+              <span className="doc-card__kind">Your {docNoun(doc.procedure)} is ready</span>
               <span className="doc-card__title">{doc.title}</span>
             </span>
-            <span className={`guard guard--${doc.guardrail.status.toLowerCase()}`}>{doc.guardrail.status}</span>
-            <span className="doc-card__open">
-              Open <Icon name="arrow" size={14} />
-            </span>
-          </button>
-        )}
-
-        {m.sources && m.sources.length > 0 && (
-          <div className="sources">
-            <span className="eyebrow">Sources</span>
-            {m.sources.map((s) => (
-              <span key={s.title} className={`source source--${s.kind}`} title={s.kind === 'drive' ? 'Google Drive document' : 'Notion knowledge page'}>
-                <Icon name={s.kind === 'drive' ? 'drive' : 'book'} size={13} />
-                {s.title}
-              </span>
-            ))}
           </div>
-        )}
-      </div>
+          {doc.guardrail.status === 'FLAG' && <p className="doc-card__check">Needs checking before use</p>}
+          <button className="btn btn--primary btn--block" onClick={() => onOpenDocument(doc.id)}>
+            Open document <Icon name="arrow" />
+          </button>
+        </div>
+      )}
+
+      {m.sources && m.sources.length > 0 && m.status === 'done' && (
+        <p className="based-on">
+          <Icon name="book" size={15} /> Based on: {basedOn(m.sources)}
+        </p>
+      )}
     </div>
   );
 }

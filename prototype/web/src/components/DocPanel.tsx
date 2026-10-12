@@ -1,28 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { DOC_TYPE_LABEL, type AgentDocument, type ReformatStyle } from '../agent';
-import {
-  canShare,
-  copyText,
-  downloadMarkdown,
-  downloadWord,
-  fileBase,
-  isEmbedded,
-  printPdf,
-  shareDoc,
-  toMarkdown,
-} from '../lib/export';
+import { canShare, copyText, downloadWord, fileBase, isEmbedded, printPdf, shareDoc, toMarkdown } from '../lib/export';
 import { DocView } from './DocView';
 import { Icon } from './Icon';
+import { basedOn } from './MessageList';
 
 interface Props {
   documents: AgentDocument[];
   selectedId: string | null;
   open: boolean;
-  wide: boolean;
   busy: boolean;
   onSelect: (id: string) => void;
   onClose: () => void;
-  onToggleWide: () => void;
   onReformat: (doc: AgentDocument, style: ReformatStyle) => void;
   onAskChange: (doc: AgentDocument) => void;
   onSaved: (docId: string, path: string) => void;
@@ -36,44 +25,38 @@ const DRIVE_FOLDER: Record<string, string> = {
   feedback: 'Feedback',
   session: 'Session-Templates',
 };
-const drivePath = (d: AgentDocument) => `iTOP Agent Outputs/${DRIVE_FOLDER[d.procedure] ?? 'Other'}/${fileBase(d)}.md`;
+const drivePath = (d: AgentDocument) => `iTOP Agent Outputs/${DRIVE_FOLDER[d.procedure] ?? 'Other'}/${fileBase(d)}`;
 
-const REFORMATS: { style: ReformatStyle; label: string }[] = [
-  { style: 'shorter', label: 'Shorter' },
-  { style: 'checklist', label: 'Checklist' },
-  { style: 'patient', label: 'Patient handout' },
-];
+const versionName = (d: AgentDocument) =>
+  ({ 'Short version': 'Shorter', Checklist: 'Checklist', 'Patient handout': 'For patients' })[
+    d.title.match(/^(Checklist|Short version|Patient handout) — /)?.[1] ?? ''
+  ] ?? 'Original';
 
-const versionLabel = (d: AgentDocument) => {
-  const v = d.version ?? 1;
-  const kind = d.title.match(/^(Checklist|Short version|Patient handout) — /)?.[1];
-  return v === 1 ? 'Original' : `v${v}${kind ? ` · ${kind}` : ''}`;
-};
+type Sheet = 'none' | 'save' | 'change';
 
 export function DocPanel(props: Props) {
-  const { documents, selectedId, open, wide, busy, onSelect, onClose, onToggleWide, onReformat, onAskChange, onSaved } = props;
+  const { documents, selectedId, open, busy, onSelect, onClose, onReformat, onAskChange, onSaved } = props;
   const doc = documents.find((d) => d.id === selectedId) ?? documents[documents.length - 1];
-  const [menu, setMenu] = useState(false);
+  const [sheet, setSheet] = useState<Sheet>('none');
   const [toast, setToast] = useState<string | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!toast) return;
-    const t = setTimeout(() => setToast(null), 3200);
+    const t = setTimeout(() => setToast(null), 3500);
     return () => clearTimeout(t);
   }, [toast]);
 
   useEffect(() => {
-    if (!menu) return;
-    const close = (e: MouseEvent) => !menuRef.current?.contains(e.target as Node) && setMenu(false);
-    document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
-  }, [menu]);
+    if (sheet !== 'none') setToast(null);
+  }, [sheet]);
 
-  useEffect(() => scrollRef.current?.scrollTo({ top: 0 }), [doc?.id]);
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+    setSheet('none');
+  }, [doc?.id]);
 
-  // Group versions of the same document family under one row of tabs.
+  // Versions of one document share a root; different documents get their own tab.
   const rootOf = (d: AgentDocument): string => {
     const parent = d.parentId && documents.find((x) => x.id === d.parentId);
     return parent ? rootOf(parent) : d.id;
@@ -81,171 +64,149 @@ export function DocPanel(props: Props) {
   const family = doc ? documents.filter((d) => rootOf(d) === rootOf(doc)) : [];
   const roots = documents.filter((d) => !d.parentId || !documents.some((x) => x.id === d.parentId));
 
-  const blockedNote = 'Downloads are blocked in this preview link. Use Copy, or open the app file on a computer.';
-  const runExport = (fn: () => void, done: string) => {
-    setMenu(false);
-    fn();
-    setToast(isEmbedded ? blockedNote : done);
+  const done = (msg: string) => {
+    setSheet('none');
+    setToast(msg);
   };
+  const blocked = 'Downloads are turned off in this preview. Use “Copy the text” instead.';
 
-  const onCopy = async () => setToast((await copyText(toMarkdown(doc!))) ? 'Copied as text. Paste it into an email or chat.' : 'Copy failed. Select the text instead.');
-  const onShare = async () => {
-    try {
-      await shareDoc(doc!);
-    } catch {
-      setToast('Sharing was cancelled.');
-    }
-  };
-  const onSave = () => {
-    const path = drivePath(doc!);
-    onSaved(doc!.id, path);
-    setToast('Saved to Google Drive (demo: nothing was written).');
+  const actions = doc && {
+    word: () => (downloadWord(doc), done(isEmbedded ? blocked : 'Word file saved to your device.')),
+    pdf: () => (printPdf(doc), done(isEmbedded ? blocked : 'Choose “Save as PDF” or a printer.')),
+    copy: async () => done((await copyText(toMarkdown(doc))) ? 'Copied. Paste it into an email or document.' : 'Could not copy. Please try again.'),
+    send: async () => {
+      setSheet('none');
+      try {
+        await shareDoc(doc);
+      } catch {
+        /* cancelled */
+      }
+    },
+    drive: () => (onSaved(doc.id, drivePath(doc)), done('Saved to Google Drive. (Demo: nothing was written.)')),
   };
 
   return (
-    <aside className={`desk ${open ? 'is-open' : ''} ${wide ? 'is-wide' : ''}`} aria-label="Documents">
+    <aside className={`desk ${open ? 'is-open' : ''}`} aria-label="Document">
       <header className="desk__head">
-        <button className="back-btn" onClick={onClose}>
+        <button className="btn btn--primary desk__back" onClick={onClose}>
           <Icon name="back" /> Back to chat
         </button>
-        <div className="desk__heading">
-          <div className="eyebrow">Documents</div>
-          <div className="desk__count">
-            {documents.length ? `${roots.length} in this conversation` : 'Nothing generated yet'}
-          </div>
-        </div>
-        <button className="icon-btn desk__wide" onClick={onToggleWide} aria-label={wide ? 'Narrow panel' : 'Widen panel'} title={wide ? 'Narrow panel' : 'Widen panel'}>
-          <Icon name={wide ? 'collapse' : 'expand'} />
-        </button>
+        <h2 className="desk__title">Your document</h2>
       </header>
 
       {roots.length > 1 && (
-        <div className="desk__tabs" role="tablist" aria-label="Documents">
-          {roots.map((d) => (
-            <button
-              key={d.id}
-              role="tab"
-              aria-selected={rootOf(doc!) === d.id}
-              className={`desk__tab ${rootOf(doc!) === d.id ? 'is-active' : ''}`}
-              onClick={() => onSelect(documents.filter((x) => rootOf(x) === d.id).pop()!.id)}
-            >
-              {DOC_TYPE_LABEL[d.procedure]}
-            </button>
-          ))}
+        <div className="tabs" role="tablist" aria-label="Documents in this conversation">
+          {roots.map((d) => {
+            const on = doc && rootOf(doc) === d.id;
+            return (
+              <button
+                key={d.id}
+                role="tab"
+                aria-selected={!!on}
+                className={`tab ${on ? 'is-active' : ''}`}
+                onClick={() => onSelect(documents.filter((x) => rootOf(x) === d.id).pop()!.id)}
+              >
+                {DOC_TYPE_LABEL[d.procedure]}
+              </button>
+            );
+          })}
         </div>
       )}
 
       {doc ? (
         <>
-          <div className="actions">
-            <div className="actions__main">
-              <div className="menu-wrap" ref={menuRef}>
-                <button className="btn btn--navy" onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-haspopup="menu">
-                  <Icon name="download" /> Download <Icon name="chevron" size={14} />
-                </button>
-                {menu && (
-                  <div className="menu" role="menu">
-                    <button role="menuitem" onClick={() => runExport(() => downloadWord(doc), 'Word file downloaded.')}>
-                      <span>Word</span>
-                      <span className="menu__ext">.doc</span>
-                    </button>
-                    <button role="menuitem" onClick={() => runExport(() => printPdf(doc), 'Choose “Save as PDF” in the print dialog.')}>
-                      <span>PDF</span>
-                      <span className="menu__ext">print → save</span>
-                    </button>
-                    <button role="menuitem" onClick={() => runExport(() => downloadMarkdown(doc), 'Markdown file downloaded.')}>
-                      <span>Markdown</span>
-                      <span className="menu__ext">.md</span>
-                    </button>
-                    {isEmbedded && <p className="menu__note">{blockedNote}</p>}
-                  </div>
-                )}
-              </div>
-              {canShare && (
-                <button className="btn btn--line" onClick={onShare}>
-                  <Icon name="share" /> Send
-                </button>
-              )}
-              <button className="btn btn--line" onClick={onCopy}>
-                <Icon name="copy" /> Copy
-              </button>
-              <button className={`btn btn--line ${doc.savedPath ? 'is-done' : ''}`} onClick={onSave} disabled={!!doc.savedPath}>
-                <Icon name={doc.savedPath ? 'check' : 'drive'} /> {doc.savedPath ? 'Saved' : 'Save to Drive'}
-              </button>
-            </div>
-            <div className="actions__reformat">
-              <span className="eyebrow">Reformat</span>
-              {REFORMATS.map((r) => (
-                <button key={r.style} className="chip chip--small" onClick={() => onReformat(doc, r.style)} disabled={busy}>
-                  {r.label}
-                </button>
-              ))}
-              <button className="chip chip--small" onClick={() => onAskChange(doc)} disabled={busy}>
-                Other change…
-              </button>
-            </div>
-          </div>
-
-          {family.length > 1 && (
-            <div className="versions" role="tablist" aria-label="Versions">
-              {family.map((d) => (
-                <button
-                  key={d.id}
-                  role="tab"
-                  aria-selected={d.id === doc.id}
-                  className={`version ${d.id === doc.id ? 'is-active' : ''}`}
-                  onClick={() => onSelect(d.id)}
-                >
-                  {versionLabel(d)}
-                </button>
-              ))}
-            </div>
-          )}
-
           <div className="desk__doc" ref={scrollRef}>
+            {family.length > 1 && (
+              <div className="versions">
+                <span className="versions__label">Versions:</span>
+                {family.map((d) => (
+                  <button key={d.id} className={`version ${d.id === doc.id ? 'is-active' : ''}`} onClick={() => onSelect(d.id)} aria-pressed={d.id === doc.id}>
+                    {versionName(d)}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <article className="sheet">
               <div className="sheet__brand">
                 <span className="sheet__mark">
                   iTOP<span>.</span>
                 </span>
-                <span className={`guard guard--${doc.guardrail.status.toLowerCase()}`}>Guardrail {doc.guardrail.status}</span>
-              </div>
-              <div className="eyebrow">
-                {DOC_TYPE_LABEL[doc.procedure]} · Version {doc.version ?? 1} ·{' '}
-                {new Date(doc.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                <span className="sheet__kind">{DOC_TYPE_LABEL[doc.procedure]}</span>
               </div>
               <h2 className="sheet__title">{doc.title}</h2>
-              {doc.guardrail.flags.length > 0 && (
-                <div className="sheet__flags">
-                  <strong>Needs review:</strong> {doc.guardrail.flags.join('; ')}
+              {doc.guardrail.status === 'FLAG' && (
+                <div className="sheet__check">
+                  <strong>Needs checking before use.</strong> {doc.guardrail.flags.join(' ')}
                 </div>
               )}
               <DocView markdown={doc.body} />
               <footer className="sheet__foot">
-                <div className="eyebrow">Sources</div>
-                <div className="sheet__sources">
-                  {doc.sources.map((s) => (
-                    <span key={s.title} className={`source source--${s.kind}`}>
-                      <Icon name={s.kind === 'drive' ? 'drive' : 'book'} size={13} />
-                      {s.title}
-                    </span>
-                  ))}
-                </div>
+                <p>
+                  <strong>Based on:</strong> {basedOn(doc.sources)}
+                </p>
                 {doc.savedPath && (
                   <p className="sheet__saved">
-                    <Icon name="drive" size={14} /> {doc.savedPath}
+                    <Icon name="check" size={16} /> Saved to Google Drive: {doc.savedPath}
                   </p>
                 )}
               </footer>
             </article>
           </div>
+
+          <div className="desk__actions">
+            <button className="btn btn--primary btn--big" onClick={() => setSheet('save')}>
+              <Icon name="download" /> Save or send
+            </button>
+            <button className="btn btn--outline btn--big" onClick={() => setSheet('change')} disabled={busy}>
+              <Icon name="edit" /> Change it
+            </button>
+          </div>
+
+          {sheet !== 'none' && (
+            <div className="sheet-modal" role="dialog" aria-modal="true" aria-label={sheet === 'save' ? 'Save or send' : 'Change it'}>
+              <div className="sheet-modal__scrim" onClick={() => setSheet('none')} />
+              <div className="sheet-modal__card">
+                {sheet === 'save' && actions && (
+                  <>
+                    <h3 className="sheet-modal__title">Save or send this document</h3>
+                    {isEmbedded && <p className="sheet-modal__note">{blocked}</p>}
+                    <Option icon="file" title="Download for Word" desc="Open and edit it in Microsoft Word." onClick={actions.word} />
+                    <Option icon="print" title="Print or save as PDF" desc="For printing, or to email as a PDF." onClick={actions.pdf} />
+                    {canShare && <Option icon="share" title="Send" desc="Email or message it from this device." onClick={actions.send} />}
+                    <Option icon="copy" title="Copy the text" desc="Paste it into an email or another document." onClick={actions.copy} />
+                    <Option
+                      icon={doc.savedPath ? 'check' : 'drive'}
+                      title={doc.savedPath ? 'Saved to Google Drive' : 'Save to Google Drive'}
+                      desc="Keeps a copy in the iTOP outputs folder."
+                      onClick={actions.drive}
+                      disabled={!!doc.savedPath}
+                    />
+                  </>
+                )}
+                {sheet === 'change' && (
+                  <>
+                    <h3 className="sheet-modal__title">How should it change?</h3>
+                    <p className="sheet-modal__hint">You keep the original. The new version appears next to it.</p>
+                    <Option icon="arrow" title="Make it shorter" desc="Only the essentials." onClick={() => onReformat(doc, 'shorter')} />
+                    <Option icon="check" title="Turn it into a checklist" desc="Tick-boxes for the day." onClick={() => onReformat(doc, 'checklist')} />
+                    <Option icon="chat" title="Rewrite for patients" desc="Plain words, for handing out." onClick={() => onReformat(doc, 'patient')} />
+                    <Option icon="edit" title="Something else" desc="Type what you would like changed." onClick={() => onAskChange(doc)} />
+                  </>
+                )}
+                <button className="btn btn--quiet btn--block" onClick={() => setSheet('none')}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <div className="desk__empty">
           <div className="desk__empty-mark" aria-hidden>
-            <Icon name="doc" size={28} />
+            <Icon name="doc" size={30} />
           </div>
-          <p>SOPs, lesson plans, event packs and feedback reports appear here, ready to download, send or save to Drive.</p>
+          <p>When you create a document, it appears here. You can then save, print or send it.</p>
         </div>
       )}
 
@@ -255,5 +216,19 @@ export function DocPanel(props: Props) {
         </div>
       )}
     </aside>
+  );
+}
+
+function Option({ icon, title, desc, onClick, disabled }: { icon: string; title: string; desc: ReactNode; onClick: () => void; disabled?: boolean }) {
+  return (
+    <button className="option" onClick={onClick} disabled={disabled}>
+      <span className="option__icon">
+        <Icon name={icon} size={22} />
+      </span>
+      <span className="option__text">
+        <span className="option__title">{title}</span>
+        <span className="option__desc">{desc}</span>
+      </span>
+    </button>
   );
 }

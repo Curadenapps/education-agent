@@ -21,6 +21,9 @@ const PATHS: Record<string, string> = {
   share: 'M10 3v10M6 7l4-4 4 4M5 11v5h10v-5',
   copy: 'M7 7h9v9H7zM4 13V4h9',
   check: 'M4.5 10.5l3.5 3.5 7.5-8',
+  chat: 'M4 5h12v8H9l-4 3v-3H4z',
+  print: 'M6 8V3h8v5M6 14H4V8h12v6h-2M6 11h8v6H6z',
+  edit: 'M4 16h3l8.5-8.5-3-3L4 13zM11 6l3 3',
   book: 'M4 4.5c2-.8 4-.8 6 .5 2-1.3 4-1.3 6-.5V16c-2-.8-4-.8-6 .5-2-1.3-4-1.3-6-.5zM10 5v11.5',
 };
 

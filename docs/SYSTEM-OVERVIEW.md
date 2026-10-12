@@ -50,4 +50,5 @@ skills/itop-sop/references/  legacy drafts (read-only)
 1. ~~Old `agents/education-agent.md`~~ — done: slimmed to output formats as `agents/education-agent-procedures.md`.
 2. ~~Backend or static demo~~ — decided: static demo with a clean adapter so a backend can plug in later.
 3. ~~Document panel~~ — done (Phase C): formatted preview, Word/PDF/Markdown export, copy, send, save to Drive (simulated), reformat with versions.
+   Simplified for non-expert users: two-choice start screen, plain words, 17px text, one "Save or send" and one "Change it" action.
 4. Phase D: backend skeleton in `prototype/server` (API routes, Claude adapter stub, config, developer guide).

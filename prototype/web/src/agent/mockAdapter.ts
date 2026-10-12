@@ -33,7 +33,7 @@ const SRC = {
 const SCRIPTS: Record<ProcedureId, () => Script> = {
   sop: () => ({
     text:
-      'Here is a clinical SOP for the Modified Bass technique, built from the iTOP Clinical Protocols page and checked against the iTOP Guidelines 2024. Every step carries its source. The clinician notes are left open for review, so the guardrail is marked FLAG until a clinician signs off.',
+      'Here is a clinical SOP for the Modified Bass technique, built from the iTOP Clinical Protocols page and checked against the iTOP Guidelines 2024. Every step carries its source. The clinician notes are left open, so it is marked as needing checking until a clinician signs off.',
     document: {
       title: 'SOP — Modified Bass Technique',
       guardrail: { status: 'FLAG', flags: ['Clinician notes need review before use'] },
@@ -123,10 +123,10 @@ Teach patients to clean the sulcus area systematically with zero pressure, using
     text:
       'For 16 participants at an Introductory seminar the Touch to Teach ratio is at most 1:8, so you need 2 Instructors alongside the Lecturer. The plan below covers the checklists, run sheet and stations. Remember to publish the seminar on curadenacademy.com.',
     document: {
-      title: 'Event plan — iTOP Introductory, 1 day',
+      title: 'Seminar plan — iTOP Introductory, 1 day',
       guardrail: { status: 'PASS', flags: [] },
       sources: [SRC.seminarOps, SRC.eventTemplates, SRC.operational],
-      body: `# iTOP Event Plan: Introductory Seminar
+      body: `# Seminar Plan: iTOP Introductory
 
 **Type** Introductory · **Duration** 1 day · **Participants** 16 · **Instructors** 2 (ratio 1:8)
 
@@ -173,10 +173,10 @@ Collect participant feedback the same day and send a recall invitation within 2 
     text:
       'I grouped the sample feedback (14 entries) into four themes. Practical sessions scored highest. One item suggests brushing with firm pressure, which contradicts the protocol, so it is flagged and left out of the recommendations.',
     document: {
-      title: 'Feedback report — Introductory, Zagreb',
+      title: 'Feedback summary — Introductory, Zagreb',
       guardrail: { status: 'FLAG', flags: ['1 protocol deviation in the feedback'] },
       sources: [SRC.feedback, SRC.protocols],
-      body: `# Feedback Synthesis Report
+      body: `# Feedback Summary
 
 **Topic** Introductory seminar, Zagreb · **Type** Best practices · **Entries** 14 (sample data)
 **Roles** 9 practitioners · 3 dentists · 2 educators
@@ -222,10 +222,10 @@ It is particularly useful for patients with braces and implants.`,
     text:
       'BOB 24% falls in the Improvement tier (10–25%) and PCR 38% in the Intensive tier (over 30%). The template focuses on supervised re-training. Every patient-facing field is marked for clinician review.',
     document: {
-      title: 'Session template — Follow-up',
+      title: 'Patient session sheet — Follow-up',
       guardrail: { status: 'FLAG', flags: ['Patient-facing content needs clinician review'] },
       sources: [SRC.bob, SRC.protocols, SRC.behaviour],
-      body: `# iTOP Session Template
+      body: `# Patient Session Sheet
 
 **Session type** Follow-up · **Date** ${today()}
 **Clinician** [CLINICIAN REVIEW REQUIRED] · **Patient ID** [CLINICIAN REVIEW REQUIRED]

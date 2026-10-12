@@ -17,9 +17,9 @@ export interface Procedure {
 export const PROCEDURES: Procedure[] = [
   {
     id: 'sop',
-    label: 'Create SOP',
+    label: 'SOP',
     prompt: 'Create an SOP for the Modified Bass technique for clinicians.',
-    blurb: 'Step-by-step protocol with sources and clinician review fields.',
+    blurb: 'A step-by-step procedure your team can follow.',
     makesDocument: true,
     keywords: ['sop', 'guideline', 'standard operating', 'procedure for'],
   },
@@ -27,23 +27,23 @@ export const PROCEDURES: Procedure[] = [
     id: 'lesson',
     label: 'Lesson plan',
     prompt: 'Build a 90-minute Touch to Teach lesson plan on interdental brushing for hygienists.',
-    blurb: 'ODPF session flow with at least 60% hands-on time.',
+    blurb: 'A Touch to Teach session plan, mostly hands-on.',
     makesDocument: true,
     keywords: ['lesson', 'touch to teach', 't2t', 'odpf', 'teach'],
   },
   {
     id: 'event',
-    label: 'Event plan',
+    label: 'Seminar plan',
     prompt: 'Plan a 1-day iTOP Introductory seminar for 16 participants.',
-    blurb: 'Checklists, run sheet, stations, ratios and materials.',
+    blurb: 'Checklists, timetable, staff and materials for a seminar.',
     makesDocument: true,
     keywords: ['event', 'seminar plan', 'workshop', 'cpd day', 'plan a'],
   },
   {
     id: 'feedback',
-    label: 'Synthesise feedback',
+    label: 'Feedback summary',
     prompt: 'Synthesise the feedback from last month’s Introductory seminar in Zagreb.',
-    blurb: 'Themes, weighted insights and protocol deviation flags.',
+    blurb: 'The main points from participant feedback.',
     makesDocument: true,
     keywords: ['feedback', 'synthes', 'survey', 'evaluation'],
   },
@@ -57,9 +57,9 @@ export const PROCEDURES: Procedure[] = [
   },
   {
     id: 'session',
-    label: 'Session template',
+    label: 'Patient session sheet',
     prompt: 'Make a follow-up session template for a patient with BOB 24% and PCR 38%.',
-    blurb: 'Patient session sheet mapped from BOB measurements.',
+    blurb: 'A session sheet based on a patient’s BOB results.',
     makesDocument: true,
     keywords: ['session template', 'bob', 'pcr', 'patient session'],
   },
@@ -86,10 +86,17 @@ export const procedureById = (id: ProcedureId) => PROCEDURES.find((p) => p.id ==
 export const DOC_TYPE_LABEL: Record<ProcedureId, string> = {
   sop: 'SOP',
   lesson: 'Lesson plan',
-  event: 'Event plan',
-  feedback: 'Feedback report',
+  event: 'Seminar plan',
+  feedback: 'Feedback summary',
   protocol: 'Protocol',
-  session: 'Session template',
+  session: 'Patient session sheet',
   academy: 'Course match',
   operational: 'Answer',
 };
+
+/** Label for use mid-sentence ("Your seminar plan is ready"); keeps acronyms like SOP. */
+export const docNoun = (id: ProcedureId) => (DOC_TYPE_LABEL[id] === 'SOP' ? 'SOP' : DOC_TYPE_LABEL[id].toLowerCase());
+
+/** Start-screen groupings. */
+export const DOCUMENT_TYPES = PROCEDURES.filter((p) => p.makesDocument);
+export const EXAMPLE_QUESTIONS = PROCEDURES.filter((p) => !p.makesDocument);

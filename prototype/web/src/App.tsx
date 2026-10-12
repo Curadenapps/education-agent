@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { agent, DOC_TYPE_LABEL, type Attachment } from './agent';
+import { agent, type Attachment } from './agent';
 import { Composer, toAttachments } from './components/Composer';
 import { DocPanel } from './components/DocPanel';
 import { EmptyState } from './components/EmptyState';
@@ -12,11 +12,10 @@ export default function App() {
   const chat = useChat();
   const { active } = chat;
   const [railOpen, setRailOpen] = useState(false);
-  const [deskOpen, setDeskOpen] = useState(false); // drawer state on narrow screens
+  const [deskOpen, setDeskOpen] = useState(false); // full-screen document on phones and tablets
   const [docId, setDocId] = useState<string | null>(null);
   const [files, setFiles] = useState<Attachment[]>([]);
   const [dragging, setDragging] = useState(false);
-  const [wide, setWide] = useState(false);
   const [seenDocId, setSeenDocId] = useState<string | null>(null);
   const [prefill, setPrefill] = useState<{ text: string; nonce: number }>();
 
@@ -31,6 +30,7 @@ export default function App() {
     setDocId(null);
     setFiles([]);
     setRailOpen(false);
+    setDeskOpen(false);
   }, [active.id]);
 
   const openDoc = (id: string) => {
@@ -39,13 +39,12 @@ export default function App() {
     setDeskOpen(true);
   };
 
-  // On phones and tablets the panel is hidden, so a new document gets a pill above the message box.
+  // Phones and tablets: the Document button turns lime until the new document is opened.
   const unseenDoc = latestDoc && latestDoc.id !== seenDocId && !chat.busy ? latestDoc : undefined;
-
   const isEmpty = active.messages.length === 0;
 
   return (
-    <div className={`app ${wide ? 'is-wide' : ''}`}>
+    <div className="app">
       <Sidebar
         conversations={chat.conversations}
         activeId={active.id}
@@ -56,12 +55,10 @@ export default function App() {
         onRemove={chat.remove}
         onClose={() => setRailOpen(false)}
       />
-      {(railOpen || deskOpen) && (
-        <div className="scrim" onClick={() => (setRailOpen(false), setDeskOpen(false))} aria-hidden />
-      )}
+      {railOpen && <div className="scrim" onClick={() => setRailOpen(false)} aria-hidden />}
 
       <main
-        className={`main ${dragging ? 'is-dragging' : ''}`}
+        className="main"
         onDragOver={(e) => {
           if (e.dataTransfer.types.includes('Files')) {
             e.preventDefault();
@@ -76,55 +73,39 @@ export default function App() {
         }}
       >
         <header className="topbar">
-          <button className="icon-btn topbar__menu" onClick={() => setRailOpen(true)} aria-label="Open menu">
-            <Icon name="menu" />
+          <button className="topbar__btn topbar__menu" onClick={() => setRailOpen(true)}>
+            <Icon name="menu" size={22} /> <span className="topbar__btn-label">Menu</span>
           </button>
-          <div className="topbar__title">
-            <h2>{isEmpty ? 'iTOP Agent' : active.title}</h2>
-            <span className="eyebrow">Education Hub knowledge · Notion + Google Drive</span>
-          </div>
-          <span className={`mode ${agent.live ? 'mode--live' : ''}`} title={agent.live ? 'Connected to the live agent' : 'Sample answers, no live agent'}>
-            <span className="mode__dot" />
-            {agent.label}
-          </span>
-          <button className="icon-btn topbar__new" onClick={chat.newConversation} disabled={chat.busy || isEmpty} aria-label="New conversation" title="New conversation">
-            <Icon name="plus" />
-          </button>
-          <button
-            className={`docs-btn ${unseenDoc ? 'has-new' : ''}`}
-            onClick={() => (latestDoc ? openDoc(docId ?? latestDoc.id) : setDeskOpen(true))}
-            aria-label={`Documents (${active.documents.length})`}
-          >
-            <Icon name="doc" size={16} />
-            <span className="docs-btn__label">Documents</span>
-            <span className="docs-btn__count">{active.documents.length}</span>
-          </button>
+          <h1 className="topbar__title">{isEmpty ? 'iTOP Assistant' : active.title}</h1>
+          {!agent.live && <span className="demo-badge">Demo</span>}
+          {!isEmpty && (
+            <button className="topbar__btn topbar__new" onClick={chat.newConversation} disabled={chat.busy}>
+              <Icon name="plus" size={20} /> <span className="topbar__btn-label">New</span>
+            </button>
+          )}
+          {active.documents.length > 0 && (
+            <button className={`topbar__btn topbar__docs ${unseenDoc ? 'has-new' : ''}`} onClick={() => openDoc(docId ?? latestDoc!.id)}>
+              <Icon name="doc" size={20} /> <span className="topbar__btn-label">Document</span>
+            </button>
+          )}
         </header>
 
         <div className="scroll">
           {isEmpty ? (
-            <EmptyState onPick={chat.runProcedure} disabled={chat.busy} />
+            <EmptyState
+              disabled={chat.busy}
+              onPick={chat.runProcedure}
+              onTypeOwn={() => setPrefill({ text: '', nonce: Date.now() })}
+            />
           ) : (
             <MessageList messages={active.messages} documents={active.documents} onOpenDocument={openDoc} />
           )}
         </div>
 
-        {unseenDoc && (
-          <div className="ready-pill-wrap">
-            <button className="ready-pill" onClick={() => openDoc(unseenDoc.id)}>
-              <span className="ready-pill__dot" />
-              {DOC_TYPE_LABEL[unseenDoc.procedure]} ready
-              <span className="ready-pill__open">
-                Open <Icon name="arrow" size={14} />
-              </span>
-            </button>
-          </div>
-        )}
-
         <Composer
           prefill={prefill}
           busy={chat.busy}
-          showChips={!isEmpty}
+          showCreate={!isEmpty}
           pendingFiles={files}
           onFilesChange={setFiles}
           onSend={(text, attachments) => chat.send(text, { attachments })}
@@ -134,8 +115,8 @@ export default function App() {
 
         {dragging && (
           <div className="dropzone" aria-hidden>
-            <Icon name="clip" size={28} />
-            Drop files to attach them
+            <Icon name="clip" size={30} />
+            Drop the file here to attach it
           </div>
         )}
       </main>
@@ -144,18 +125,16 @@ export default function App() {
         documents={active.documents}
         selectedId={docId}
         open={deskOpen}
-        wide={wide}
         busy={chat.busy}
         onSelect={setDocId}
         onClose={() => setDeskOpen(false)}
-        onToggleWide={() => setWide((w) => !w)}
         onReformat={(doc, style) => {
-          setDeskOpen(false); // show the reply streaming; the new version opens from the pill or card
+          setDeskOpen(false); // show the reply being written; the new version opens from the card
           chat.reformat(doc, style);
         }}
         onAskChange={(doc) => {
           setDeskOpen(false);
-          setPrefill({ text: `Change “${doc.title}”: `, nonce: Date.now() });
+          setPrefill({ text: `Please change “${doc.title}”: `, nonce: Date.now() });
         }}
         onSaved={chat.markSaved}
       />
