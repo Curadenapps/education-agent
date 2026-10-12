@@ -51,4 +51,14 @@ skills/itop-sop/references/  legacy drafts (read-only)
 2. ~~Backend or static demo~~ — decided: static demo with a clean adapter so a backend can plug in later.
 3. ~~Document panel~~ — done (Phase C): formatted preview, Word/PDF/Markdown export, copy, send, save to Drive (simulated), reformat with versions.
    Simplified for non-expert users: two-choice start screen, plain words, 17px text, one "Save or send" and one "Change it" action.
-4. Phase D: backend skeleton in `prototype/server` (API routes, Claude adapter stub, config, developer guide).
+4. ~~Pull real knowledge~~ — done for the claude.ai preview: `prototype/web/src/agent/connectorAdapter.ts` (see below).
+5. Phase D: hosted server adapter in `prototype/server` for people without claude.ai accounts (same tools, service account for Drive, Notion integration token).
+
+## How the interface gets its knowledge
+
+| Where the app runs | Who answers | Knowledge source |
+|---|---|---|
+| claude.ai preview link (viewer allows Claude + Notion + Google Drive connectors) | **Live**: Claude on the viewer's account | Notion knowledge pages via the persona's routing table → linked Google Drive source documents |
+| Anywhere else (downloaded file, local dev) | **Demo**: canned samples (`mockAdapter.ts`) | none |
+
+The live adapter gives Claude three tools — `read_knowledge_page` (Notion `notion-fetch`), `search_knowledge` (Notion `notion-search` in the Assets DB) and `read_source_document` (Google Drive `read_file_content`) — plus the persona and procedures files as instructions, bundled at build time. Archived or outdated pages are skipped; "In Review" content is flagged on documents; "Based on" lists only the pages and Drive documents actually read. Publishing must declare the capabilities in `CAPABILITIES` (connectorAdapter.ts).

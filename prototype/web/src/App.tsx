@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { agent, type Attachment } from './agent';
+import { procedureById, resolveAgent, type Attachment, type ProcedureId } from './agent';
 import { Composer, toAttachments } from './components/Composer';
 import { DocPanel } from './components/DocPanel';
 import { EmptyState } from './components/EmptyState';
@@ -18,6 +18,11 @@ export default function App() {
   const [dragging, setDragging] = useState(false);
   const [seenDocId, setSeenDocId] = useState<string | null>(null);
   const [prefill, setPrefill] = useState<{ text: string; nonce: number }>();
+  const [live, setLive] = useState(false);
+
+  useEffect(() => {
+    resolveAgent().then((a) => setLive(a.live));
+  }, []);
 
   // Show each new document as it arrives.
   const latestDoc = active.documents[active.documents.length - 1];
@@ -42,6 +47,13 @@ export default function App() {
   // Phones and tablets: the Document button turns lime until the new document is opened.
   const unseenDoc = latestDoc && latestDoc.id !== seenDocId && !chat.busy ? latestDoc : undefined;
   const isEmpty = active.messages.length === 0;
+
+  // Live: documents start a sentence for the person to finish. Demo: run the canned example.
+  const pick = (id: ProcedureId) => {
+    const starter = procedureById(id).starter;
+    if (live && starter) setPrefill({ text: starter, nonce: Date.now() });
+    else chat.runProcedure(id);
+  };
 
   return (
     <div className="app">
@@ -77,7 +89,9 @@ export default function App() {
             <Icon name="menu" size={22} /> <span className="topbar__btn-label">Menu</span>
           </button>
           <h1 className="topbar__title">{isEmpty ? 'iTOP Assistant' : active.title}</h1>
-          {!agent.live && <span className="demo-badge">Demo</span>}
+          <span className={`demo-badge ${live ? 'is-live' : ''}`} title={live ? 'Answers come from the iTOP knowledge base' : 'Sample answers only'}>
+            {live ? 'Live' : 'Demo'}
+          </span>
           {!isEmpty && (
             <button className="topbar__btn topbar__new" onClick={chat.newConversation} disabled={chat.busy}>
               <Icon name="plus" size={20} /> <span className="topbar__btn-label">New</span>
@@ -94,7 +108,8 @@ export default function App() {
           {isEmpty ? (
             <EmptyState
               disabled={chat.busy}
-              onPick={chat.runProcedure}
+              live={live}
+              onPick={pick}
               onTypeOwn={() => setPrefill({ text: '', nonce: Date.now() })}
             />
           ) : (
@@ -105,11 +120,12 @@ export default function App() {
         <Composer
           prefill={prefill}
           busy={chat.busy}
+          live={live}
           showCreate={!isEmpty}
           pendingFiles={files}
           onFilesChange={setFiles}
           onSend={(text, attachments) => chat.send(text, { attachments })}
-          onProcedure={chat.runProcedure}
+          onProcedure={pick}
           onStop={chat.stop}
         />
 

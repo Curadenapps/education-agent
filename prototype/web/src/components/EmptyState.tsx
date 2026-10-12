@@ -5,13 +5,14 @@ import { Icon } from './Icon';
 
 interface Props {
   disabled: boolean;
+  live: boolean;
   onPick: (id: ProcedureId) => void;
   /** Puts the cursor in the message box so the person can type their own question. */
   onTypeOwn: () => void;
 }
 
 /** Start screen: one choice at a time. Ask a question, or create a document. */
-export function EmptyState({ disabled, onPick, onTypeOwn }: Props) {
+export function EmptyState({ disabled, live, onPick, onTypeOwn }: Props) {
   const [mode, setMode] = useState<'choose' | 'ask' | 'create'>('choose');
 
   return (
@@ -101,7 +102,9 @@ export function EmptyState({ disabled, onPick, onTypeOwn }: Props) {
                 </button>
               ))}
             </div>
-            <p className="start__lede start__lede--small">In this demo, each choice makes a sample document.</p>
+            <p className="start__lede start__lede--small">
+              {live ? 'Pick one, then tell me what it should be about.' : 'In this demo, each choice makes a sample document.'}
+            </p>
           </>
         )}
       </div>

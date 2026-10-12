@@ -61,6 +61,8 @@ export interface ChatMessage {
   documentId?: string;
   sources?: Source[];
   status: 'streaming' | 'done' | 'error' | 'stopped';
+  /** Latest progress line while streaming. */
+  progress?: string;
   createdAt: string;
 }
 
@@ -77,6 +79,8 @@ export interface AgentRequest {
 /** Streamed back in this order: text deltas, then optional document and sources, then done. */
 export type AgentEvent =
   | { type: 'text'; delta: string }
+  /** What the agent is doing right now ("Reading “BOB Thresholds”…"), shown while it works. */
+  | { type: 'status'; text: string }
   | { type: 'document'; document: AgentDocument }
   | { type: 'sources'; sources: Source[] }
   | { type: 'done' }

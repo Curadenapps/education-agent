@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { agent, procedureById } from '../agent';
+import { procedureById, resolveAgent } from '../agent';
 import type { AgentDocument, AgentRequest, Attachment, ChatMessage, ProcedureId, ReformatStyle } from '../agent';
 
 export interface Conversation {
@@ -97,12 +97,15 @@ export function useChat() {
       setBusy(true);
 
       try {
+        const agent = await resolveAgent();
         for await (const event of agent.send(
           { conversationId: conv.id, messages: history, procedure: opts.procedure, attachments, reformat: opts.reformat },
           controller.signal,
         )) {
           if (event.type === 'text') {
             patchMessage(conv.id, agentMsg.id, (m) => ({ ...m, text: m.text + event.delta }));
+          } else if (event.type === 'status') {
+            patchMessage(conv.id, agentMsg.id, (m) => ({ ...m, progress: event.text }));
           } else if (event.type === 'document') {
             const doc = event.document;
             patch(conv.id, (c) => ({
@@ -117,7 +120,7 @@ export function useChat() {
             return;
           }
         }
-        patchMessage(conv.id, agentMsg.id, (m) => ({ ...m, status: 'done' }));
+        patchMessage(conv.id, agentMsg.id, (m) => ({ ...m, status: 'done', progress: undefined }));
       } catch (err) {
         const stopped = err instanceof DOMException && err.name === 'AbortError';
         patchMessage(conv.id, agentMsg.id, (m) => ({

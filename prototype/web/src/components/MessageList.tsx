@@ -70,11 +70,21 @@ function AgentMessage({
             <span />
             <span />
           </span>
-          Writing…
+          {m.progress ?? 'Writing…'}
         </div>
       ) : (
         <div className={`msg__text ${m.status === 'streaming' ? 'is-streaming' : ''}`}>
           <RichText text={m.text} />
+        </div>
+      )}
+      {m.status === 'streaming' && m.text && m.progress === 'Writing the document…' && (
+        <div className="typing">
+          <span className="typing__dots" aria-hidden>
+            <span />
+            <span />
+            <span />
+          </span>
+          Writing the document…
         </div>
       )}
       {m.status === 'stopped' && <p className="msg__note">You stopped this answer.</p>}

@@ -92,6 +92,7 @@ button:disabled { cursor: not-allowed; opacity: 0.5; }
   font-size: 14px; font-weight: 500; padding: 4px 12px; border-radius: 999px;
   background: var(--flag-bg); color: var(--flag); flex-shrink: 0;
 }
+.demo-badge.is-live { background: var(--pass-bg); color: var(--pass); }
 .scroll { flex: 1; overflow-y: auto; min-height: 0; }
 
 /* ── Start screen ─────────────────────────────────── */

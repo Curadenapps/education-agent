@@ -5,6 +5,7 @@ import { Icon } from './Icon';
 
 interface Props {
   busy: boolean;
+  live: boolean;
   /** Hidden on the start screen, which already offers the document choices. */
   showCreate: boolean;
   pendingFiles: Attachment[];
@@ -27,7 +28,7 @@ const SPEECH_HINT: Record<string, string> = {
   unsupported: 'Speaking works in Chrome or Edge. Please type instead.',
 };
 
-export function Composer({ busy, showCreate, pendingFiles, onFilesChange, onSend, onProcedure, onStop, prefill }: Props) {
+export function Composer({ busy, live, showCreate, pendingFiles, onFilesChange, onSend, onProcedure, onStop, prefill }: Props) {
   const [text, setText] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
@@ -194,7 +195,9 @@ export function Composer({ busy, showCreate, pendingFiles, onFilesChange, onSend
       {hint ? (
         <p className={`composer__note ${speech.state === 'blocked' || speech.state === 'unsupported' ? 'is-warn' : ''}`}>{hint}</p>
       ) : (
-        <p className="composer__note">Demo with sample answers. A clinician must check clinical content.</p>
+        <p className="composer__note">
+          {live ? 'Answers come from the iTOP knowledge base.' : 'Demo with sample answers.'} A clinician must check clinical content.
+        </p>
       )}
     </div>
   );
